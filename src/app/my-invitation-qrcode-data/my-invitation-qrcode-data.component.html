@@ -1,0 +1,56 @@
+<div [@routerTransition]>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1>{{ "Invitation Data" | localize }}</h1>
+        </div>
+     
+      </div>
+    </div>
+  </section>
+
+    <section class="content px-2">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header">
+        
+        </div>
+        <div class="card-body table-responsive p-0">
+          <table class="table table-hover table-condensed text-nowrap table-bordered">
+            <thead class="bg-light">
+              
+            </thead>
+            <tbody>
+              <tr><td colspan="2"><h4 class="text-center">Visitor Information</h4></td></tr>
+              <tr><td><b>Visitor Name</b></td><td>{{invitationData.visitorName}}</td></tr>
+               <tr><td><b>Visitor Email</b></td><td>{{invitationData.visitorEmail}}</td></tr>
+              <tr><td><b>Visitor Contact#</b></td><td>{{invitationData.visitorContact}}</td></tr>
+
+              <tr><td colspan="2"></td></tr>
+
+              <tr ><td colspan="2"><h4 class="text-center">Invitation Information</h4></td></tr>
+              <tr><td><b>Concerned Person</b></td><td>{{invitationData.concernedPerson}}</td></tr>
+              <tr><td><b>Date</b></td><td>{{invitationData.date}}</td></tr>
+              <tr><td><b>Time</b></td><td>{{invitationData.time}}</td></tr>
+              <tr><td><b>Arrival Instructions</b></td><td>{{invitationData.arrivalInstructions}}</td></tr>
+              <tr><td><b>Purpose of visit</b></td><td>{{invitationData.purposeOfVisit}}</td></tr>
+              <tr><td><b>Destination</b></td><td>{{invitationData.destination}}</td></tr>
+              <tr><td><b>Status</b></td><td>
+                <select class="form-control" (change)="onChangeAttendanceStatus(invitationData)" [(ngModel)]="invitationData.status">
+               <option *ngFor="let status of attendanceStatus" [value]="status.status">
+                {{status.status}}
+               </option>
+              </select></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer bg-light border-top">
+          <div class="row">
+        
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>

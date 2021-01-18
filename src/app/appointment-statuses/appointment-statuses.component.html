@@ -1,0 +1,132 @@
+<div [@routerTransition]>
+  
+  <div class="row">
+    <div class="col-lg-9 col-md-9">
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-6">
+              <h1>{{ "Appointment Statuses" | localize }}</h1>
+            </div>
+              <div class="col-6 text-right">
+              <a href="javascript:;" class="btn bg-blue" (click)="createStatus()">
+                <i class="fa fa-plus-square"></i>
+                {{ "Create" | localize }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="content px-2">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="card-header">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <button
+                    type="button"
+                    class="btn bg-blue"
+                    (click)="getDataPage(1)"
+                  >
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="keyword"
+                  [placeholder]="'SearchWithThreeDot' | localize"
+                  [(ngModel)]="keyword"
+                  (keyup.enter)="getDataPage(1)"
+                />
+              </div>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap" [busy]="isTableLoading">
+                <thead class="bg-light">
+                  <tr>
+                    <th>{{ "S.No" | localize }}</th>
+               
+                    <th>{{ "Status" | localize }}</th>
+    
+    
+                    <th style="width: 200px;">{{ "Actions" | localize }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let status of appointmentStatus
+                        | paginate
+                          : {
+                              id: 'server',
+                              itemsPerPage: pageSize,
+                              currentPage: pageNumber,
+                              totalItems: totalItems
+                            }
+                     index as i"
+                  >
+                  <td>{{i+1}}</td>
+                  <td>{{status.status}}</td>
+                         <td>
+                      <button
+                        type="button"
+                        class="btn btn-sm bg-secondary"
+                        (click)="editStatus(status)"
+                      >
+                        <i class="fas fa-pencil-alt"></i>
+    
+                        {{ "Edit" | localize }}
+                      </button>
+                               <button
+                        type="button"
+                        class="btn btn-sm bg-danger mx-2"
+                        (click)="delete(status)"
+                      >
+                        <i class="fas fa-trash"></i>
+                        {{ "Delete" | localize }}
+                      </button>
+                    
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer bg-light border-top">
+              <div class="row">
+                <div class="col-sm-4 col-12 text-sm-left text-center">
+                  <button class="btn btn-secondary" (click)="refresh()">
+                    <i class="fas fa-redo-alt"></i>
+                  </button>
+                </div>
+                <div class="col-sm-4 col-12 text-center">
+                  <p class="mb-0 my-2">
+                    {{ "TotalRecordsCount" | localize: totalItems }}
+                  </p>
+                </div>
+                <div class="col-sm-4 col-12">
+                  <div class="float-sm-right m-auto">
+                    <abp-pagination-controls
+                      id="server"
+                      (pageChange)="getDataPage($event)"
+                    >
+                    </abp-pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="col-lg-3 col-md-3 card" style="min-height: 100vh;">
+      <div class="card-header">
+        <h3>{{ "Appointment Statuses" | localize }}</h3>
+      </div>
+      <div class="card-body">
+        <p>This option displays the list of statuses user can mark against each invitation.</p>
+        <p>The privileged user can assign manage these statuses.</p>
+      </div>
+
+    </div>
+</div>

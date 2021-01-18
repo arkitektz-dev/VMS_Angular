@@ -1,0 +1,30 @@
+
+  <abp-modal-header
+    [title]="'Invitation Details' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+   <table class="table table-bordered">
+    <tr *ngIf="appointment!=null">
+      <td><b>Visitor Name</b></td><td>{{appointment?.visitor.firstName}} {{appointment?.visitor.lastName}}</td>    </tr>
+      <tr>      <td><b>Date Time</b></td><td>{{appointment.date.format("MM/D/YYYY")}} {{appointment.time.format("LT")}}</td>
+</tr>
+          <tr>      <td><b>Purpose of visit</b></td><td>{{appointment?.purposeOfVisit}}</td>
+</tr>
+              <tr>      <td><b>Arrival Instructions</b></td><td>{{appointment?.arrivalInstructions}}</td>
+</tr>
+                  <tr>      <td><b>Destination</b></td><td>{{appointment?.destination}}</td>
+</tr>
+ 
+
+
+   </table>
+  
+
+      </div>
+
+      
+        
+<div class="modal-footer">
+<button class="btn btn-primary" (click)="bsModalRef.hide()">Ok</button>
+</div>

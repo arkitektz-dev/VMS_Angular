@@ -1,0 +1,44 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #editStatusForm="ngForm"
+  (ngSubmit)="save()"
+>
+  <abp-modal-header
+    [title]="'Edit Status' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+   
+        <div class="form-group row required">
+          <label class="col-md-3 col-form-label" for="statusName">
+            {{ "Status Name" | localize }}
+          </label>
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              name="siteName"
+              id="siteName"
+              required
+              minlength="2"
+              maxlength="32"
+              [(ngModel)]="status.status"
+              #statusModel="ngModel"
+              #statusEl
+            />
+            <abp-validation-summary
+              [control]="statusModel"
+              [controlEl]="statusEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+        
+      </div>
+        
+  <abp-modal-footer
+    [cancelDisabled]="saving"
+    [saveDisabled]="!editStatusForm.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"
+  ></abp-modal-footer>
+</form>

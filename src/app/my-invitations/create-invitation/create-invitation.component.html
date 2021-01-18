@@ -1,0 +1,292 @@
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #createInvitationForm="ngForm"
+  (ngSubmit)="save()"
+>
+  <abp-modal-header
+    [title]="'Create New Invitation' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+   
+    
+    <div style="float:right">
+      <button *ngIf="!isVisitorAdd" class="btn btn-primary" (click)="AddVisitorShow()"><i class="fa fa-plus-square"></i> Add Visitor</button>
+      <button *ngIf="isVisitorAdd"  class="btn btn-danger" (click)="CancelVisitorShow()">Cancel</button>
+    </div>
+   
+
+<!--Visitor Form Fields Start-->
+
+<div *ngIf="isVisitorAdd" class="form-group row required mt-5">
+          <label class="col-md-3 col-form-label" for="firstName">
+            {{ "First Name" | localize }}
+          </label>
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              name="firstName"
+              id="firstName"
+              required
+              minlength="2"
+              maxlength="32"
+              [(ngModel)]="visitor.firstName"
+              #firstNameModel="ngModel"
+              #firstNameEl
+            />
+            <abp-validation-summary
+              [control]="firstNameModel"
+              [controlEl]="firstNameEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+        <div *ngIf="isVisitorAdd" class="form-group row required">
+          <label class="col-md-3 col-form-label" for="lastName">
+            {{ "Last Name" | localize }}
+          </label>
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              name="lastName"
+              id="lastName"
+              required
+              minlength="2"
+              maxlength="32"
+              [(ngModel)]="visitor.lastName"
+              #lastNameModel="ngModel"
+              #lastNameEl
+            />
+            <abp-validation-summary
+              [control]="lastNameModel"
+              [controlEl]="lastNameEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+               <div *ngIf="isVisitorAdd" class="form-group row">
+          <label class="col-md-3 col-form-label" for="company">
+            {{ "Company" | localize }}
+          </label>
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              name="company"
+              id="company"
+              minlength="2"
+              maxlength="100"
+              [(ngModel)]="visitor.company"
+         
+            />
+      
+          </div>
+        </div>
+               <div *ngIf="isVisitorAdd" class="form-group row required">
+          <label class="col-md-3 col-form-label" for="emailAddress">
+            {{ "Email Address" | localize }}
+          </label>
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              name="emailAddress"
+              id="emailAddress"
+              minlength="2"
+              maxlength="100"
+              [(ngModel)]="visitor.emailAddress"
+              #emailModel="ngModel"
+              #emailEl
+            />
+           <abp-validation-summary
+              [control]="emailModel"
+              [controlEl]="emailEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+               <div *ngIf="isVisitorAdd" class="form-group row required">
+          <label class="col-md-3 col-form-label" for="contactNumber">
+            {{ "Contact Number" | localize }}
+          </label>
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              name="contactNumber"
+              id="contactNumber"
+              required
+              minlength="2"
+              maxlength="32"
+              [(ngModel)]="visitor.contactNumber"
+              #contactNumberModel="ngModel"
+              #contactNumberEl
+            />
+            <abp-validation-summary
+              [control]="contactNumberModel"
+              [controlEl]="contactNumberEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+        <div *ngIf="isVisitorAdd" class="text-center">
+          <button [disabled]="!visitor.firstName || !visitor.lastName || !visitor.contactNumber" type="button" class="btn btn-success" (click)="saveVisitor()">Submit</button>
+        </div>
+
+<!--Visitor Form Fields End-->
+
+  
+        <div *ngIf="!isVisitorAdd" class="form-group row required mt-5">
+          <label class="col-md-3 col-form-label" for="vistorName">
+            {{ "Visitor Name" | localize }}
+          </label>
+          <div class="col-md-9">
+
+
+ <ng-select [items]="visitors$ | async"
+            name="fullNameWithContactNumber"
+           bindLabel="fullNameWithContactNumber"
+           bindValue="id"
+           [hideSelected]="true"
+           [trackByFn]="trackByFn"
+           [minTermLength]="2"
+           [loading]="visitorLoading"
+           typeToSearchText="Please enter 2 or more characters"
+           [typeahead]="visitorInput$"
+           [(ngModel)]="myInvitation.visitorId"
+           (change)="onChangeVisitor(myInvitation)"
+           #vistorNameModel="ngModel"
+           required
+           #vistorNameEl
+           >
+</ng-select>
+            <abp-validation-summary
+              [control]="vistorNameModel"
+              [controlEl]="vistorNameEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+
+     <div *ngIf="!isVisitorAdd" class="form-group row">
+          <label class="col-md-3 col-form-label" for="purposeOfVisit">
+            {{ "Purpose Of Visit" | localize }}
+          </label>
+          <div class="col-md-9">
+
+        <input type="text"
+          name="purposeOfVisit"
+           placeholder=""
+           class="form-control"
+          [(ngModel)]="myInvitation.purposeOfVisit"
+           #purposeOfVisitModel="ngModel"
+           #purposeOfVisitEl
+           >
+
+            <abp-validation-summary
+              [control]="purposeOfVisitModel"
+              [controlEl]="purposeOfVisitEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+
+          <div *ngIf="!isVisitorAdd" class="form-group row">
+          <label class="col-md-3 col-form-label" for="arrivalInstructions">
+            {{ "Arrival Instructions" | localize }}
+          </label>
+          <div class="col-md-9">
+
+ 
+            <textarea class="form-control" 
+                name="arrivalInstructions"
+             [(ngModel)]="myInvitation.arrivalInstructions"
+            #arrivalInstructionsModel="ngModel"
+           #arrivalInstructionsEl>
+
+            </textarea>
+            <abp-validation-summary
+              [control]="arrivalInstructionsModel"
+              [controlEl]="arrivalInstructionsEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+
+            <div *ngIf="!isVisitorAdd" class="form-group row">
+          <label class="col-md-3 col-form-label" for="destination">
+            {{ "Destination" | localize }}
+          </label>
+          <div class="col-md-9">
+
+        <input type="text"
+          name="destination"
+           placeholder=""
+           class="form-control"
+          [(ngModel)]="myInvitation.destination"
+           #destinationModel="ngModel"
+           #destinationEl
+           >
+
+            <abp-validation-summary
+              [control]="destinationModel"
+              [controlEl]="destinationEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+      
+
+
+
+
+
+     <div *ngIf="!isVisitorAdd" class="form-group row required">
+          <label class="col-md-3 col-form-label" for="date">
+            {{ "Date" | localize }}
+          </label>
+          <div class="col-md-9">
+
+        <input type="text"
+         required
+          name="date"
+           placeholder="MM/DD/YYYY"
+           class="form-control"
+           bsDatepicker
+           [bsConfig]="{ minDate: this.minDate  }"
+           placement="top right"
+          [(ngModel)]="myInvitation.date"
+           #dateModel="ngModel"
+           #dateEl
+           >
+
+            <abp-validation-summary
+              [control]="dateModel"
+              [controlEl]="dateEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+
+             <div *ngIf="!isVisitorAdd" class="form-group row required">
+          <label class="col-md-3 col-form-label" for="time">
+            {{ "Time" | localize }}
+          </label>
+          <div class="col-md-9">
+
+        <timepicker [(ngModel)]="myInvitation.time" name="time"
+         required #timeModel="ngModel" #timeEl
+        ></timepicker>
+
+            <abp-validation-summary
+              [control]="timeModel"
+              [controlEl]="timeEl"
+            ></abp-validation-summary>
+          </div>
+        </div>
+
+
+      </div>
+
+      
+        
+  <abp-modal-footer
+    [cancelDisabled]="saving"
+    [saveDisabled]="!createInvitationForm.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"
+  ></abp-modal-footer>
+</form>

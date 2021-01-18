@@ -1,0 +1,16 @@
+
+<li class="nav-item" *ngIf="isSitesSelectShow">
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect01"><i class="fa fa-warehouse"></i></label>
+  </div>
+  <select [(ngModel)]="defaultSiteId" class="custom-select" id="inputGroupSelect01" (change)="onSiteChange($event)">
+   <option *ngFor="let site of sites$ | async" [value]="site.id">
+     {{site.siteName}}
+   </option>
+  </select>
+</div>
+
+
+
+</li>
