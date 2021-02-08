@@ -53,6 +53,7 @@ export class SitesComponent extends PagedListingComponentBase<SiteDto> {
         this.showPaging(result, pageNumber);
       });
   }
+
   protected delete(site: SiteDto): void {
     abp.message.confirm(
       this.l("SiteDeleteWarningMessage", site.siteName),
@@ -80,6 +81,7 @@ export class SitesComponent extends PagedListingComponentBase<SiteDto> {
   editSite(site: SiteDto): void {
     this.showCreateOrEditSiteDialog(site.id);
   }
+
   showCreateOrEditSiteDialog(id?: number): void {
     let createOrEditSiteDialog: BsModalRef;
     if (!id) {

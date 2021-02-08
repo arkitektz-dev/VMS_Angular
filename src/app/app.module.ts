@@ -81,12 +81,15 @@ import { SidebarUserPanelComponent } from "./layout/sidebar-user-panel.component
 import { SidebarMenuComponent } from "./layout/sidebar-menu.component";
 import { AppointmentQrcodeDataComponent } from "./appointment-qrcode-data/appointment-qrcode-data.component";
 import { MyInvitationQrcodeDataComponent } from "./my-invitation-qrcode-data/my-invitation-qrcode-data.component";
+import { DownloadSetupComponent } from "./download-setup/download-setup.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AboutComponent,
+
+    DownloadSetupComponent,
     // tenants
     TenantsComponent,
     CreateTenantDialogComponent,

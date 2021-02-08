@@ -16,6 +16,7 @@ import { ChangePasswordComponent } from "./users/change-password/change-password
 import { VisitorsComponent } from "./visitors/visitors.component";
 import { SitesComponent } from "./sites/sites.component";
 import { AppointmentsComponent } from "./appointments/appointments.component";
+import { DownloadSetupComponent } from "./download-setup/download-setup.component";
 
 @NgModule({
   imports: [
@@ -27,6 +28,11 @@ import { AppointmentsComponent } from "./appointments/appointments.component";
           {
             path: "home",
             component: HomeComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "download",
+            component: DownloadSetupComponent,
             canActivate: [AppRouteGuard],
           },
           {

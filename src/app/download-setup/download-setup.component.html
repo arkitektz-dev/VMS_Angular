@@ -1,0 +1,120 @@
+﻿<div [@routerTransition]>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1>{{ "Probe Application" | localize }}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header" *ngIf="show">
+          <form
+            class="form-horizontal"
+            autocomplete="off"
+            #createSiteForm="ngForm"
+            (ngSubmit)="save()"
+          >
+            <button class="btn bg-blue">
+              <i class="fas fa-download"></i>
+
+              {{ "Request" | localize }}
+            </button>
+          </form>
+        </div>
+
+        <div class="card-body">
+          <p *ngFor="helperText">{{ helperText }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- <div [@routerTransition]>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h1>{{ "HomePage" | localize }}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>3125</h3>
+              <p>Total Visits</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/stargazers" class="small-box-footer"
+              target="_blank">
+              More info
+              <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>140</h3>
+              <p>Today's Visits</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/graphs/contributors"
+              class="small-box-footer" target="_blank">
+              More info
+              <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>16</h3>
+              <p>Pending Visits</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/dependents" class="small-box-footer"
+              target="_blank">
+              More info
+              <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-primary">
+            <div class="inner">
+              <h3>31</h3>
+              <p>Cancelled Visits</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-times"></i>
+            </div>
+            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/members" class="small-box-footer"
+              target="_blank">
+              More info
+              <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+</div> -->
