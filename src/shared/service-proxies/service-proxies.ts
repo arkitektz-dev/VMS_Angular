@@ -1883,8 +1883,8 @@ export class ConfigurationServiceProxy {
      * @param appSecret (optional) 
      * @return Success
      */
-    getSetupLink(appSecret: string | null | undefined): Observable<HttpResponseMessage> {
-        let url_ = this.baseUrl + "/api/services/app/Configuration/GetSetupLink?";
+    getSetup(appSecret: string | null | undefined): Observable<string> {
+        let url_ = this.baseUrl + "/api/services/app/Configuration/GetSetup?";
         if (appSecret !== undefined && appSecret !== null)
             url_ += "appSecret=" + encodeURIComponent("" + appSecret) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -1898,20 +1898,20 @@ export class ConfigurationServiceProxy {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetSetupLink(response_);
+            return this.processGetSetup(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetSetupLink(<any>response_);
+                    return this.processGetSetup(<any>response_);
                 } catch (e) {
-                    return <Observable<HttpResponseMessage>><any>_observableThrow(e);
+                    return <Observable<string>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<HttpResponseMessage>><any>_observableThrow(response_);
+                return <Observable<string>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetSetupLink(response: HttpResponseBase): Observable<HttpResponseMessage> {
+    protected processGetSetup(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1922,7 +1922,7 @@ export class ConfigurationServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = HttpResponseMessage.fromJS(resultData200);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1930,7 +1930,61 @@ export class ConfigurationServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<HttpResponseMessage>(<any>null);
+        return _observableOf<string>(<any>null);
+    }
+
+    /**
+     * @param appSecret (optional) 
+     * @return Success
+     */
+    checkSetupGenerated(appSecret: string | null | undefined): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/services/app/Configuration/CheckSetupGenerated?";
+        if (appSecret !== undefined && appSecret !== null)
+            url_ += "appSecret=" + encodeURIComponent("" + appSecret) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCheckSetupGenerated(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCheckSetupGenerated(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<boolean>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCheckSetupGenerated(response: HttpResponseBase): Observable<boolean> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<boolean>(<any>null);
     }
 }
 
@@ -4063,7 +4117,7 @@ export class UserServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createUsersBulk(body: CreateUserActiveDirectoryDto | undefined): Observable<any[]> {
+    createUsersBulk(body: CreateUserActiveDirectoryDto | undefined): Observable<UserActiveDirectoryResponseDto> {
         let url_ = this.baseUrl + "/api/services/app/User/CreateUsersBulk";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4086,14 +4140,14 @@ export class UserServiceProxy {
                 try {
                     return this.processCreateUsersBulk(<any>response_);
                 } catch (e) {
-                    return <Observable<any[]>><any>_observableThrow(e);
+                    return <Observable<UserActiveDirectoryResponseDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<any[]>><any>_observableThrow(response_);
+                return <Observable<UserActiveDirectoryResponseDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processCreateUsersBulk(response: HttpResponseBase): Observable<any[]> {
+    protected processCreateUsersBulk(response: HttpResponseBase): Observable<UserActiveDirectoryResponseDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -4104,11 +4158,7 @@ export class UserServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(item);
-            }
+            result200 = UserActiveDirectoryResponseDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -4116,7 +4166,7 @@ export class UserServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<any[]>(<any>null);
+        return _observableOf<UserActiveDirectoryResponseDto>(<any>null);
     }
 
     /**
@@ -6937,452 +6987,6 @@ export interface IChangeUiThemeInput {
     theme: string;
 }
 
-export class Version implements IVersion {
-    readonly major: number;
-    readonly minor: number;
-    readonly build: number;
-    readonly revision: number;
-    readonly majorRevision: number;
-    readonly minorRevision: number;
-
-    constructor(data?: IVersion) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).major = _data["major"];
-            (<any>this).minor = _data["minor"];
-            (<any>this).build = _data["build"];
-            (<any>this).revision = _data["revision"];
-            (<any>this).majorRevision = _data["majorRevision"];
-            (<any>this).minorRevision = _data["minorRevision"];
-        }
-    }
-
-    static fromJS(data: any): Version {
-        data = typeof data === 'object' ? data : {};
-        let result = new Version();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["major"] = this.major;
-        data["minor"] = this.minor;
-        data["build"] = this.build;
-        data["revision"] = this.revision;
-        data["majorRevision"] = this.majorRevision;
-        data["minorRevision"] = this.minorRevision;
-        return data; 
-    }
-
-    clone(): Version {
-        const json = this.toJSON();
-        let result = new Version();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IVersion {
-    major: number;
-    minor: number;
-    build: number;
-    revision: number;
-    majorRevision: number;
-    minorRevision: number;
-}
-
-export class StringStringIEnumerableKeyValuePair implements IStringStringIEnumerableKeyValuePair {
-    readonly key: string | undefined;
-    readonly value: string[] | undefined;
-
-    constructor(data?: IStringStringIEnumerableKeyValuePair) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).key = _data["key"];
-            if (Array.isArray(_data["value"])) {
-                (<any>this).value = [] as any;
-                for (let item of _data["value"])
-                    (<any>this).value.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): StringStringIEnumerableKeyValuePair {
-        data = typeof data === 'object' ? data : {};
-        let result = new StringStringIEnumerableKeyValuePair();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["key"] = this.key;
-        if (Array.isArray(this.value)) {
-            data["value"] = [];
-            for (let item of this.value)
-                data["value"].push(item);
-        }
-        return data; 
-    }
-
-    clone(): StringStringIEnumerableKeyValuePair {
-        const json = this.toJSON();
-        let result = new StringStringIEnumerableKeyValuePair();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IStringStringIEnumerableKeyValuePair {
-    key: string | undefined;
-    value: string[] | undefined;
-}
-
-export class HttpContent implements IHttpContent {
-    readonly headers: StringStringIEnumerableKeyValuePair[] | undefined;
-
-    constructor(data?: IHttpContent) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["headers"])) {
-                (<any>this).headers = [] as any;
-                for (let item of _data["headers"])
-                    (<any>this).headers.push(StringStringIEnumerableKeyValuePair.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): HttpContent {
-        data = typeof data === 'object' ? data : {};
-        let result = new HttpContent();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.headers)) {
-            data["headers"] = [];
-            for (let item of this.headers)
-                data["headers"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): HttpContent {
-        const json = this.toJSON();
-        let result = new HttpContent();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IHttpContent {
-    headers: StringStringIEnumerableKeyValuePair[] | undefined;
-}
-
-export enum HttpStatusCode {
-    _100 = 100,
-    _101 = 101,
-    _102 = 102,
-    _103 = 103,
-    _200 = 200,
-    _201 = 201,
-    _202 = 202,
-    _203 = 203,
-    _204 = 204,
-    _205 = 205,
-    _206 = 206,
-    _207 = 207,
-    _208 = 208,
-    _226 = 226,
-    _300 = 300,
-    _301 = 301,
-    _302 = 302,
-    _303 = 303,
-    _304 = 304,
-    _305 = 305,
-    _306 = 306,
-    _307 = 307,
-    _308 = 308,
-    _400 = 400,
-    _401 = 401,
-    _402 = 402,
-    _403 = 403,
-    _404 = 404,
-    _405 = 405,
-    _406 = 406,
-    _407 = 407,
-    _408 = 408,
-    _409 = 409,
-    _410 = 410,
-    _411 = 411,
-    _412 = 412,
-    _413 = 413,
-    _414 = 414,
-    _415 = 415,
-    _416 = 416,
-    _417 = 417,
-    _421 = 421,
-    _422 = 422,
-    _423 = 423,
-    _424 = 424,
-    _426 = 426,
-    _428 = 428,
-    _429 = 429,
-    _431 = 431,
-    _451 = 451,
-    _500 = 500,
-    _501 = 501,
-    _502 = 502,
-    _503 = 503,
-    _504 = 504,
-    _505 = 505,
-    _506 = 506,
-    _507 = 507,
-    _508 = 508,
-    _510 = 510,
-    _511 = 511,
-}
-
-export class HttpMethod implements IHttpMethod {
-    readonly method: string | undefined;
-
-    constructor(data?: IHttpMethod) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).method = _data["method"];
-        }
-    }
-
-    static fromJS(data: any): HttpMethod {
-        data = typeof data === 'object' ? data : {};
-        let result = new HttpMethod();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["method"] = this.method;
-        return data; 
-    }
-
-    clone(): HttpMethod {
-        const json = this.toJSON();
-        let result = new HttpMethod();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IHttpMethod {
-    method: string | undefined;
-}
-
-export class HttpRequestMessage implements IHttpRequestMessage {
-    version: Version;
-    content: HttpContent;
-    method: HttpMethod;
-    requestUri: string | undefined;
-    readonly headers: StringStringIEnumerableKeyValuePair[] | undefined;
-    readonly properties: { [key: string]: any; } | undefined;
-
-    constructor(data?: IHttpRequestMessage) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.version = _data["version"] ? Version.fromJS(_data["version"]) : <any>undefined;
-            this.content = _data["content"] ? HttpContent.fromJS(_data["content"]) : <any>undefined;
-            this.method = _data["method"] ? HttpMethod.fromJS(_data["method"]) : <any>undefined;
-            this.requestUri = _data["requestUri"];
-            if (Array.isArray(_data["headers"])) {
-                (<any>this).headers = [] as any;
-                for (let item of _data["headers"])
-                    (<any>this).headers.push(StringStringIEnumerableKeyValuePair.fromJS(item));
-            }
-            if (_data["properties"]) {
-                (<any>this).properties = {} as any;
-                for (let key in _data["properties"]) {
-                    if (_data["properties"].hasOwnProperty(key))
-                        (<any>this).properties[key] = _data["properties"][key];
-                }
-            }
-        }
-    }
-
-    static fromJS(data: any): HttpRequestMessage {
-        data = typeof data === 'object' ? data : {};
-        let result = new HttpRequestMessage();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["version"] = this.version ? this.version.toJSON() : <any>undefined;
-        data["content"] = this.content ? this.content.toJSON() : <any>undefined;
-        data["method"] = this.method ? this.method.toJSON() : <any>undefined;
-        data["requestUri"] = this.requestUri;
-        if (Array.isArray(this.headers)) {
-            data["headers"] = [];
-            for (let item of this.headers)
-                data["headers"].push(item.toJSON());
-        }
-        if (this.properties) {
-            data["properties"] = {};
-            for (let key in this.properties) {
-                if (this.properties.hasOwnProperty(key))
-                    data["properties"][key] = this.properties[key];
-            }
-        }
-        return data; 
-    }
-
-    clone(): HttpRequestMessage {
-        const json = this.toJSON();
-        let result = new HttpRequestMessage();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IHttpRequestMessage {
-    version: Version;
-    content: HttpContent;
-    method: HttpMethod;
-    requestUri: string | undefined;
-    headers: StringStringIEnumerableKeyValuePair[] | undefined;
-    properties: { [key: string]: any; } | undefined;
-}
-
-export class HttpResponseMessage implements IHttpResponseMessage {
-    version: Version;
-    content: HttpContent;
-    statusCode: HttpStatusCode;
-    reasonPhrase: string | undefined;
-    readonly headers: StringStringIEnumerableKeyValuePair[] | undefined;
-    readonly trailingHeaders: StringStringIEnumerableKeyValuePair[] | undefined;
-    requestMessage: HttpRequestMessage;
-    readonly isSuccessStatusCode: boolean;
-
-    constructor(data?: IHttpResponseMessage) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.version = _data["version"] ? Version.fromJS(_data["version"]) : <any>undefined;
-            this.content = _data["content"] ? HttpContent.fromJS(_data["content"]) : <any>undefined;
-            this.statusCode = _data["statusCode"];
-            this.reasonPhrase = _data["reasonPhrase"];
-            if (Array.isArray(_data["headers"])) {
-                (<any>this).headers = [] as any;
-                for (let item of _data["headers"])
-                    (<any>this).headers.push(StringStringIEnumerableKeyValuePair.fromJS(item));
-            }
-            if (Array.isArray(_data["trailingHeaders"])) {
-                (<any>this).trailingHeaders = [] as any;
-                for (let item of _data["trailingHeaders"])
-                    (<any>this).trailingHeaders.push(StringStringIEnumerableKeyValuePair.fromJS(item));
-            }
-            this.requestMessage = _data["requestMessage"] ? HttpRequestMessage.fromJS(_data["requestMessage"]) : <any>undefined;
-            (<any>this).isSuccessStatusCode = _data["isSuccessStatusCode"];
-        }
-    }
-
-    static fromJS(data: any): HttpResponseMessage {
-        data = typeof data === 'object' ? data : {};
-        let result = new HttpResponseMessage();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["version"] = this.version ? this.version.toJSON() : <any>undefined;
-        data["content"] = this.content ? this.content.toJSON() : <any>undefined;
-        data["statusCode"] = this.statusCode;
-        data["reasonPhrase"] = this.reasonPhrase;
-        if (Array.isArray(this.headers)) {
-            data["headers"] = [];
-            for (let item of this.headers)
-                data["headers"].push(item.toJSON());
-        }
-        if (Array.isArray(this.trailingHeaders)) {
-            data["trailingHeaders"] = [];
-            for (let item of this.trailingHeaders)
-                data["trailingHeaders"].push(item.toJSON());
-        }
-        data["requestMessage"] = this.requestMessage ? this.requestMessage.toJSON() : <any>undefined;
-        data["isSuccessStatusCode"] = this.isSuccessStatusCode;
-        return data; 
-    }
-
-    clone(): HttpResponseMessage {
-        const json = this.toJSON();
-        let result = new HttpResponseMessage();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IHttpResponseMessage {
-    version: Version;
-    content: HttpContent;
-    statusCode: HttpStatusCode;
-    reasonPhrase: string | undefined;
-    headers: StringStringIEnumerableKeyValuePair[] | undefined;
-    trailingHeaders: StringStringIEnumerableKeyValuePair[] | undefined;
-    requestMessage: HttpRequestMessage;
-    isSuccessStatusCode: boolean;
-}
-
 export class EmailConfig implements IEmailConfig {
     subject: string | undefined;
     body: string | undefined;
@@ -9743,6 +9347,7 @@ export class UserActiveDirectoryDto implements IUserActiveDirectoryDto {
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string | undefined;
+    checkedByAD: boolean;
 
     constructor(data?: IUserActiveDirectoryDto) {
         if (data) {
@@ -9767,6 +9372,7 @@ export class UserActiveDirectoryDto implements IUserActiveDirectoryDto {
                     this.roleNames.push(item);
             }
             this.password = _data["password"];
+            this.checkedByAD = _data["checkedByAD"];
         }
     }
 
@@ -9791,6 +9397,7 @@ export class UserActiveDirectoryDto implements IUserActiveDirectoryDto {
                 data["roleNames"].push(item);
         }
         data["password"] = this.password;
+        data["checkedByAD"] = this.checkedByAD;
         return data; 
     }
 
@@ -9811,6 +9418,7 @@ export interface IUserActiveDirectoryDto {
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string | undefined;
+    checkedByAD: boolean;
 }
 
 export class CreateUserActiveDirectoryDto implements ICreateUserActiveDirectoryDto {
@@ -9870,6 +9478,93 @@ export interface ICreateUserActiveDirectoryDto {
     users: UserActiveDirectoryDto[] | undefined;
     tenantId: number;
     appSecret: string | undefined;
+}
+
+export class UserActiveDirectoryResponseDto implements IUserActiveDirectoryResponseDto {
+    insertedUsers: any[] | undefined;
+    deletedUsers: any[] | undefined;
+    updatedUsers: any[] | undefined;
+    updatedProperties: string[] | undefined;
+
+    constructor(data?: IUserActiveDirectoryResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["insertedUsers"])) {
+                this.insertedUsers = [] as any;
+                for (let item of _data["insertedUsers"])
+                    this.insertedUsers.push(item);
+            }
+            if (Array.isArray(_data["deletedUsers"])) {
+                this.deletedUsers = [] as any;
+                for (let item of _data["deletedUsers"])
+                    this.deletedUsers.push(item);
+            }
+            if (Array.isArray(_data["updatedUsers"])) {
+                this.updatedUsers = [] as any;
+                for (let item of _data["updatedUsers"])
+                    this.updatedUsers.push(item);
+            }
+            if (Array.isArray(_data["updatedProperties"])) {
+                this.updatedProperties = [] as any;
+                for (let item of _data["updatedProperties"])
+                    this.updatedProperties.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UserActiveDirectoryResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserActiveDirectoryResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.insertedUsers)) {
+            data["insertedUsers"] = [];
+            for (let item of this.insertedUsers)
+                data["insertedUsers"].push(item);
+        }
+        if (Array.isArray(this.deletedUsers)) {
+            data["deletedUsers"] = [];
+            for (let item of this.deletedUsers)
+                data["deletedUsers"].push(item);
+        }
+        if (Array.isArray(this.updatedUsers)) {
+            data["updatedUsers"] = [];
+            for (let item of this.updatedUsers)
+                data["updatedUsers"].push(item);
+        }
+        if (Array.isArray(this.updatedProperties)) {
+            data["updatedProperties"] = [];
+            for (let item of this.updatedProperties)
+                data["updatedProperties"].push(item);
+        }
+        return data; 
+    }
+
+    clone(): UserActiveDirectoryResponseDto {
+        const json = this.toJSON();
+        let result = new UserActiveDirectoryResponseDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserActiveDirectoryResponseDto {
+    insertedUsers: any[] | undefined;
+    deletedUsers: any[] | undefined;
+    updatedUsers: any[] | undefined;
+    updatedProperties: string[] | undefined;
 }
 
 export class RoleDtoListResultDto implements IRoleDtoListResultDto {

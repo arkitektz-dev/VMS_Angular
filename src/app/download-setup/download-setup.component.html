@@ -11,17 +11,31 @@
   <section class="content px-2">
     <div class="container-fluid">
       <div class="card">
-        <div class="card-header" *ngIf="show">
+        <div class="card-header">
           <form
             class="form-horizontal"
             autocomplete="off"
             #createSiteForm="ngForm"
             (ngSubmit)="save()"
+            *ngIf="requestShow"
           >
             <button class="btn bg-blue">
               <i class="fas fa-download"></i>
 
               {{ "Request" | localize }}
+            </button>
+          </form>
+          <form
+            class="form-horizontal"
+            autocomplete="off"
+            #createSiteForm="ngForm"
+            (ngSubmit)="save()"
+            *ngIf="downloadShow"
+          >
+            <button class="btn bg-blue">
+              <i class="fas fa-download"></i>
+
+              {{ "Download" | localize }}
             </button>
           </form>
         </div>
