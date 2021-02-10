@@ -17,7 +17,7 @@
             autocomplete="off"
             #createSiteForm="ngForm"
             (ngSubmit)="save()"
-            *ngIf="requestShow"
+            *ngIf="requestShow$ | async"
           >
             <button class="btn bg-blue">
               <i class="fas fa-download"></i>
@@ -30,7 +30,7 @@
             autocomplete="off"
             #createSiteForm="ngForm"
             (ngSubmit)="save()"
-            *ngIf="downloadShow"
+            *ngIf="downloadShow$ | async"
           >
             <button class="btn bg-blue">
               <i class="fas fa-download"></i>
