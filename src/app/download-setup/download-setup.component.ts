@@ -22,76 +22,65 @@ export class DownloadSetupComponent extends AppComponentBase {
 
   public requestShow$ = new Subject<boolean>();
   public downloadShow$ = new Subject<boolean>();
-  public downloadShow$ = new Subject<boolean>();
-  public requestShow: boolean = true;
-  public downloadShow: boolean = false;
-  public helperText: string =
-    "Please click this button to request for the probe application.";
+  public waitContainer$ = new Subject<boolean>();
 
   ngOnInit(): void {
     this.requestShow$.next(false);
     this.downloadShow$.next(false);
+    this.waitContainer$.next(false);
 
     this._configurationsService
-      .checkSetupGenerated("tenant1")
+    .checkSetupStatus("tenant1")
+    .pipe(finalize(() => {}))
+    .subscribe((result) => {
+      if(result[0] === false && result[1] ===true) {
+        this.requestShow$.next(false);
+        this.waitContainer$.next(true);
+        this.downloadShow$.next(false);
+      }
+      else if(result[0] === true && result[1] === true) {
+        this.requestShow$.next(false);
+        this.waitContainer$.next(false);
+        this.downloadShow$.next(true);
+      }
+      else if(result[0] === false && result[1] === false) {
+        this.requestShow$.next(true);
+        this.waitContainer$.next(false);
+        this.downloadShow$.next(false);
+      }
+    });
+
+  }
+
+  
+  downloadSetup(): void {
+    this._configurationsService
+      .getSetup("tenant1")
       .pipe(finalize(() => {}))
-      .subscribe((result) => {
-        if (result) {
-          this.requestShow$.next(false);
-          this.downloadShow$.next(true);
-        } else {
-          this.requestShow$.next(true);
-          this.downloadShow$.next(false);
+      .subscribe((result) => {  
+        if(result.length) {
+          const byteString = window.atob(result);
+          const arrayBuffer = new ArrayBuffer(byteString.length) ; 
+          const int8Array= new Uint8Array(arrayBuffer);
+          for (let i = 0; i < byteString.length; i++) {
+             int8Array[i] = byteString.charCodeAt(i);
+          }
+          const blob = new Blob([int8Array], {type: "application/msi"});
+          importedSaveAs(blob, 'Probe Application Setup.msi')
         }
-        // this.downloadShow = true;
-        // console.log(result);
-        // if (result) {
-        //   this.downloadShow = true;
-        // }
-        // console.log(this.downloadShow);
-        // const byteString = window.atob(result);
-        // const arrayBuffer = new ArrayBuffer(byteString.length);
-        // const int8Array = new Uint8Array(arrayBuffer);
-        // for (let i = 0; i < byteString.length; i++) {
-        //   int8Array[i] = byteString.charCodeAt(i);
-        // }
-        // const blob = new Blob([int8Array], { type: "application/msi" });
-        // var a = new File([blob], "abc", { type: "application/msi" });
-        // importedSaveAs(blob, "abcz.msi");
-        // var url = window.URL.createObjectURL(a);
-        // console.log(url);
-        // return blob;
-        // console.log(result);
-        // var file = new Blob([result], { type: "application/msi" });
+        this.notify.info(this.l("Request Submitted Successfully"));
       });
   }
 
-  /**
-   * Method is use to download file.
-   * @param data - Array Buffer data
-   * @param type - type of the document.
-   */
-  downLoadFile(data: any, type: string) {
-    let blob = new Blob([data], { type: type });
-    let url = window.URL.createObjectURL(blob);
-    let pwa = window.open(url);
-    if (!pwa || pwa.closed || typeof pwa.closed == "undefined") {
-      alert("Please disable your Pop-up blocker and try again.");
-    }
-  }
-
-  save(): void {
-    this.requestShow$.next(false);
-
-    this.helperText = "Please Wait...";
+  requestSetup(): void {
     this._configurationsService
       .createSetup("tenant1")
       .pipe(finalize(() => {}))
       .subscribe((result: boolean) => {
-        if (result) {
-          this.helperText = "Successfull";
-        }
-        this.notify.info(this.l("Request Submitted Successfully"));
+        this.requestShow$.next(false);
+        this.waitContainer$.next(true);
+        this.downloadShow$.next(false);
+        // this.notify.info(this.l("Request Submitted Successfully"));
       });
   }
 }

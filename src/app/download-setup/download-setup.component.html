@@ -11,12 +11,12 @@
   <section class="content px-2">
     <div class="container-fluid">
       <div class="card">
-        <div class="card-header">
+        <div class="card-body">
           <form
             class="form-horizontal"
             autocomplete="off"
             #createSiteForm="ngForm"
-            (ngSubmit)="save()"
+            (ngSubmit)="requestSetup()"
             *ngIf="requestShow$ | async"
           >
             <button class="btn bg-blue">
@@ -24,12 +24,14 @@
 
               {{ "Request" | localize }}
             </button>
+            
+            <p>Please click this button to request for the probe application.</p>
           </form>
           <form
             class="form-horizontal"
             autocomplete="off"
             #createSiteForm="ngForm"
-            (ngSubmit)="save()"
+            (ngSubmit)="downloadSetup()"
             *ngIf="downloadShow$ | async"
           >
             <button class="btn bg-blue">
@@ -37,98 +39,13 @@
 
               {{ "Download" | localize }}
             </button>
+            <p>You can now download the application</p>
           </form>
-        </div>
+          <p *ngIf="waitContainer$ | async">Your Request is submitted successfully. Your setup will be available shortly kindly refresh your page after sometime.</p>
 
-        <div class="card-body">
-          <p *ngFor="helperText">{{ helperText }}</p>
         </div>
+ 
       </div>
     </div>
   </section>
 </div>
-
-<!-- <div [@routerTransition]>
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <h1>{{ "HomePage" | localize }}</h1>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="content px-2">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-3 col-6">
-          <div class="small-box bg-success">
-            <div class="inner">
-              <h3>3125</h3>
-              <p>Total Visits</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-star"></i>
-            </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/stargazers" class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <div class="col-lg-3 col-6">
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3>140</h3>
-              <p>Today's Visits</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-users"></i>
-            </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/graphs/contributors"
-              class="small-box-footer" target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <div class="col-lg-3 col-6">
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>16</h3>
-              <p>Pending Visits</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-clock"></i>
-            </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/dependents" class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <div class="col-lg-3 col-6">
-          <div class="small-box bg-primary">
-            <div class="inner">
-              <h3>31</h3>
-              <p>Cancelled Visits</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-times"></i>
-            </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/members" class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-
-</div> -->
