@@ -10,7 +10,9 @@ import {
   AuthenticateResultModel,
   TokenAuthServiceProxy,
 } from "@shared/service-proxies/service-proxies";
-
+import { OktaAuth } from "@okta/okta-auth-js";
+import { Observable, Observer, ReplaySubject } from "rxjs";
+import { TenantServiceProxy } from "@shared/service-proxies/service-proxies";
 @Injectable()
 export class AppAuthService {
   authenticateModel: AuthenticateModel;
@@ -27,6 +29,33 @@ export class AppAuthService {
   ) {
     this.clear();
   }
+
+  async isAuthenticated(oktaAuth) {
+    return !!(await oktaAuth.tokenManager.get("accessToken"));
+  }
+
+  async handleAuthentication(oktaAuth) {
+    // console.log(oktaAuth.token);
+
+    const tokenContainer = await oktaAuth.token.parseFromUrl();
+    // console.log(tokenContainer);
+
+    // console.log(oktaAuth);
+
+    oktaAuth.tokenManager.add("idToken", tokenContainer.tokens.idToken);
+    oktaAuth.tokenManager.add("accessToken", tokenContainer.tokens.accessToken);
+
+    if (await this.isAuthenticated(oktaAuth)) {
+      var authenticateWithOktaModel = new AuthenticateWithOktaModel();
+      authenticateWithOktaModel.userNameOrEmailAddress =
+        tokenContainer.tokens.idToken.claims.email;
+      authenticateWithOktaModel.oktaClientId =
+        tokenContainer.tokens.idToken.clientId;
+      this.authenticateWithOkta(authenticateWithOktaModel);
+    }
+  }
+
+  //
 
   logout(reload?: boolean): void {
     abp.auth.clearToken();

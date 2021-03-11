@@ -4,6 +4,11 @@ import { AppComponentBase } from "@shared/app-component-base";
 import { accountModuleAnimation } from "@shared/animations/routerTransition";
 import { AppAuthService } from "@shared/auth/app-auth.service";
 import { OktaAuthService } from "@okta/okta-angular";
+import { OktaAuth } from "@okta/okta-auth-js";
+import { Observable, Observer } from "rxjs";
+import { TenantServiceProxy } from "@shared/service-proxies/service-proxies";
+import { finalize } from "rxjs/operators";
+import { LoginOptionDto } from "../../shared/service-proxies/service-proxies";
 
 @Component({
   templateUrl: "./login.component.html",
@@ -13,23 +18,46 @@ export class LoginComponent extends AppComponentBase {
   submitting = false;
   isAuthenticated: boolean;
   isTenantSelected: boolean;
-
+  oktaAuth: any;
+  loginOptionDto: LoginOptionDto = new LoginOptionDto();
   constructor(
     injector: Injector,
     public authService: AppAuthService,
     private _sessionService: AbpSessionService,
-    public oktaAuth: OktaAuthService
+    private _configurationsService: TenantServiceProxy // public oktaAuth: OktaAuthService
   ) {
     super(injector);
     // Subscribe to authentication state changes
-    this.oktaAuth.$authenticationState.subscribe(
-      (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
-    );
+    // this.oktaAuth.$authenticationState.subscribe(
+    //   (isAuthenticated: boolean) => (this.isAuthenticated = isAuthenticated)
+    // );
   }
 
   async ngOnInit() {
-    this.isAuthenticated = await this.oktaAuth.isAuthenticated();
+    // this.isAuthenticated = await this.oktaAuth.isAuthenticated();
     this.isTenantSelected = !!abp.multiTenancy.getTenantIdCookie();
+    if (this.isTenantSelected) {
+      this._configurationsService
+        .getLoginOptions()
+        .pipe(finalize(() => {}))
+        .subscribe((result) => {
+          console.log(result);
+
+          this.loginOptionDto = result;
+
+          this.oktaAuth = new OktaAuth({
+            issuer: `https://${result.oktaDomainName}`,
+            clientId: result.oktaClientId,
+            redirectUri: `http://${window.location.host}/account/login/callback`,
+            pkce: true,
+            scopes: ["openid", "profile", "email"],
+          });
+        });
+    } else {
+      this.loginOptionDto.loginNormal = true;
+      this.loginOptionDto.loginOkta = false;
+      this.loginOptionDto.loginActiveDirectory = false;
+    }
   }
 
   get multiTenancySideIsTeanant(): boolean {
@@ -50,8 +78,6 @@ export class LoginComponent extends AppComponentBase {
   }
 
   loginWithOcta() {
-    this.oktaAuth.signInWithRedirect({
-      originalUri: "/account/oktaredirect",
-    });
+    this.oktaAuth.signInWithRedirect();
   }
 }

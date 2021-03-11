@@ -10,7 +10,6 @@ import { SharedModule } from "@shared/shared.module";
 import { AccountComponent } from "./account.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
-import { OktaRedirectComponent } from "./okta-redirect/okta-redirect.component";
 import { AccountLanguagesComponent } from "./layout/account-languages.component";
 import { AccountHeaderComponent } from "./layout/account-header.component";
 import { AccountFooterComponent } from "./layout/account-footer.component";
@@ -18,8 +17,7 @@ import { AccountFooterComponent } from "./layout/account-footer.component";
 import { TenantChangeComponent } from "./tenant/tenant-change.component";
 import { TenantChangeDialogComponent } from "./tenant/tenant-change-dialog.component";
 
-import { OKTA_CONFIG, OktaAuthModule } from "@okta/okta-angular";
-import config from "./okta.config";
+import { CallbackComponent } from "./okta-callback/okta-callback.component";
 
 @NgModule({
   imports: [
@@ -29,16 +27,14 @@ import config from "./okta.config";
     HttpClientJsonpModule,
     SharedModule,
     ServiceProxyModule,
-    OktaAuthModule,
     AccountRoutingModule,
     ModalModule.forChild(),
   ],
-  providers: [{ provide: OKTA_CONFIG, useValue: config }],
   declarations: [
     AccountComponent,
     LoginComponent,
     RegisterComponent,
-    OktaRedirectComponent,
+    CallbackComponent,
     AccountLanguagesComponent,
     AccountHeaderComponent,
     AccountFooterComponent,

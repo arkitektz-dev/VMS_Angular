@@ -1,0 +1,160 @@
+<div [@routerTransition]>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1>{{ "Login Options" | localize }}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body">
+          <form
+            class="form-horizontal"
+            autocomplete="off"
+            (ngSubmit)="updateLoginOptions()"
+          >
+            <button class="btn bg-blue">
+              <i class="fas fa-download"></i>
+
+              {{ "Update" | localize }}
+            </button>
+            <div class="form-group row mb-0">
+              <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="option_normal"
+                    [disabled]="isOptionDisabled('normal')"
+                    [checked]="isOptionChecked('normal')"
+                    (change)="onOptionChange('normal')"
+                  />
+                  <label class="custom-control-label" for="option_normal">
+                    Normal
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row mb-0">
+              <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="option_okta"
+                    [checked]="isOptionChecked('okta')"
+                    (change)="onOptionChange('okta')"
+                  />
+                  <label class="custom-control-label" for="option_okta">
+                    Okta
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row mb-20">
+              <div class="col-md-9">
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="option_ad"
+                    [checked]="isOptionChecked('activeDirectory')"
+                    (change)="onOptionChange('activeDirectory')"
+                  />
+                  <label class="custom-control-label" for="option_ad">
+                    Active Directory
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div *ngIf="this.options.indexOf('okta') !== -1" class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h6>Okta</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-group row mb-4">
+                      <label
+                        class="col-md-3 col-form-label"
+                        for="oktaDomainName"
+                      >
+                        {{ "Domain Name" | localize }}
+                      </label>
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="oktaDomainName"
+                          id="oktaDomainName"
+                          [(ngModel)]="loginOptions.oktaDomainName"
+                          required
+                          minlength="2"
+                          maxlength="32"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-3 col-form-label" for="oktaClientId">
+                        {{ "Client Id" | localize }}
+                      </label>
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="oktaClientId"
+                          id="oktaClientId"
+                          [(ngModel)]="loginOptions.oktaClientId"
+                          required
+                          minlength="2"
+                          maxlength="32"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                *ngIf="this.options.indexOf('activeDirectory') !== -1"
+                class="col-md-6"
+              >
+                <div class="card">
+                  <div class="card-header">
+                    <h6>Active Directory</h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-group row mb-0">
+                      <label class="col-md-3 col-form-label" for="adDomainName">
+                        {{ "Domain Name" | localize }}
+                      </label>
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="adDomainName"
+                          id="adDomainName"
+                          [(ngModel)]="loginOptions.adDomainName"
+                          required
+                          minlength="2"
+                          maxlength="32"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

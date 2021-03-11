@@ -81,7 +81,9 @@ import { SidebarUserPanelComponent } from "./layout/sidebar-user-panel.component
 import { SidebarMenuComponent } from "./layout/sidebar-menu.component";
 import { AppointmentQrcodeDataComponent } from "./appointment-qrcode-data/appointment-qrcode-data.component";
 import { MyInvitationQrcodeDataComponent } from "./my-invitation-qrcode-data/my-invitation-qrcode-data.component";
+
 import { DownloadSetupComponent } from "./download-setup/download-setup.component";
+import { LoginOptionComponent } from "./login-option/login-option.component";
 
 @NgModule({
   declarations: [
@@ -90,6 +92,9 @@ import { DownloadSetupComponent } from "./download-setup/download-setup.componen
     AboutComponent,
 
     DownloadSetupComponent,
+
+    LoginOptionComponent,
+
     // tenants
     TenantsComponent,
     CreateTenantDialogComponent,
