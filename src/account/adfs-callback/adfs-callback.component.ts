@@ -4,14 +4,14 @@ import { accountModuleAnimation } from "@shared/animations/routerTransition";
 import { AppAuthService } from "@shared/auth/app-auth.service";
 import { TenantServiceProxy } from "@shared/service-proxies/service-proxies";
 import { finalize } from "rxjs/operators";
-import { OktaAuth } from "@okta/okta-auth-js";
+import * as AdfsAuthContext from "adal-angular";
 
 @Component({
-  templateUrl: "./okta-callback.component.html",
+  templateUrl: "./adfs-callback.component.html",
   animations: [accountModuleAnimation()],
 })
-export class OktaCallbackComponent extends AppComponentBase {
-  oktaAuth: any;
+export class AdfsCallbackComponent extends AppComponentBase {
+  adfsAuth: any;
 
   constructor(
     injector: Injector,
@@ -26,15 +26,14 @@ export class OktaCallbackComponent extends AppComponentBase {
       .getLoginOptions()
       .pipe(finalize(() => {}))
       .subscribe((result) => {
-        this.oktaAuth = new OktaAuth({
-          clientId: result.oktaClientId,
-          issuer: `https://${result.oktaDomainName}`,
-          redirectUri: `http://${window.location.host}/account/login/callback`,
-          pkce: true,
-          scopes: ["openid", "profile", "email"],
+        this.adfsAuth = new AdfsAuthContext({
+          instance: "https://dc01.servicenowtrainer.com/",
+          tenant: "adfs",
+          clientId: "d418e598-14e5-49cd-ba2b-aa0225da4075",
+          redirectUri: window.location.origin + "/account/login/adfs-callback",
         });
-
-        this.authService.handleAuthentication(this.oktaAuth);
+        const adfsUser = this.adfsAuth.getCachedUser();
+        console.log(adfsUser);
       });
   }
 }

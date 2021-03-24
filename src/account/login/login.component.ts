@@ -9,6 +9,7 @@ import { Observable, Observer } from "rxjs";
 import { TenantServiceProxy } from "@shared/service-proxies/service-proxies";
 import { finalize } from "rxjs/operators";
 import { LoginOptionDto } from "../../shared/service-proxies/service-proxies";
+import * as AdfsAuthContext from "adal-angular";
 
 @Component({
   templateUrl: "./login.component.html",
@@ -19,7 +20,9 @@ export class LoginComponent extends AppComponentBase {
   isAuthenticated: boolean;
   isTenantSelected: boolean;
   oktaAuth: any;
+  adfsAuth: any;
   loginOptionDto: LoginOptionDto = new LoginOptionDto();
+
   constructor(
     injector: Injector,
     public authService: AppAuthService,
@@ -52,6 +55,14 @@ export class LoginComponent extends AppComponentBase {
             pkce: true,
             scopes: ["openid", "profile", "email"],
           });
+
+          this.adfsAuth = new AdfsAuthContext({
+            instance: "https://dc01.servicenowtrainer.com/",
+            tenant: "adfs",
+            clientId: "d418e598-14e5-49cd-ba2b-aa0225da4075",
+            redirectUri:
+              window.location.origin + "/account/login/adfs-callback",
+          });
         });
     } else {
       this.loginOptionDto.loginNormal = true;
@@ -79,5 +90,9 @@ export class LoginComponent extends AppComponentBase {
 
   loginWithOcta() {
     this.oktaAuth.signInWithRedirect();
+  }
+
+  loginWithAdfs() {
+    this.adfsAuth.login();
   }
 }

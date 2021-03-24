@@ -17,7 +17,8 @@ import { AccountFooterComponent } from "./layout/account-footer.component";
 import { TenantChangeComponent } from "./tenant/tenant-change.component";
 import { TenantChangeDialogComponent } from "./tenant/tenant-change-dialog.component";
 
-import { CallbackComponent } from "./okta-callback/okta-callback.component";
+import { OktaCallbackComponent } from "./okta-callback/okta-callback.component";
+import { AdfsCallbackComponent } from "./adfs-callback/adfs-callback.component";
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { CallbackComponent } from "./okta-callback/okta-callback.component";
     AccountComponent,
     LoginComponent,
     RegisterComponent,
-    CallbackComponent,
+    OktaCallbackComponent,
+    AdfsCallbackComponent,
     AccountLanguagesComponent,
     AccountHeaderComponent,
     AccountFooterComponent,

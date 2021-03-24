@@ -3,7 +3,8 @@ import { RouterModule } from "@angular/router";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { AccountComponent } from "./account.component";
-import { CallbackComponent } from "./okta-callback/okta-callback.component";
+import { OktaCallbackComponent } from "./okta-callback/okta-callback.component";
+import { AdfsCallbackComponent } from "./adfs-callback/adfs-callback.component";
 @NgModule({
   imports: [
     RouterModule.forChild([
@@ -17,7 +18,8 @@ import { CallbackComponent } from "./okta-callback/okta-callback.component";
       },
     ]),
     RouterModule.forChild([
-      { path: "login/callback", component: CallbackComponent },
+      { path: "login/callback", component: OktaCallbackComponent },
+      { path: "login/adfs-callback", component: AdfsCallbackComponent },
     ]),
   ],
   exports: [RouterModule],
