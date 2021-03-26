@@ -4102,6 +4102,62 @@ export class TokenAuthServiceProxy {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    authenticateWithAdfs(body: AuthenticateWithAdfsModel | undefined): Observable<AuthenticateResultModel> {
+        let url_ = this.baseUrl + "/api/TokenAuth/AuthenticateWithAdfs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAuthenticateWithAdfs(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAuthenticateWithAdfs(<any>response_);
+                } catch (e) {
+                    return <Observable<AuthenticateResultModel>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AuthenticateResultModel>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processAuthenticateWithAdfs(response: HttpResponseBase): Observable<AuthenticateResultModel> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthenticateResultModel.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AuthenticateResultModel>(<any>null);
+    }
+
+    /**
      * @return Success
      */
     getExternalAuthenticationProviders(): Observable<ExternalLoginProviderInfoModel[]> {
@@ -9033,7 +9089,8 @@ export class CreateLoginOptionDto implements ICreateLoginOptionDto {
     options: string[] | undefined;
     oktaDomainName: string | undefined;
     oktaClientId: string | undefined;
-    adDomainName: string | undefined;
+    adfsInstanceName: string | undefined;
+    adfsClientId: string | undefined;
 
     constructor(data?: ICreateLoginOptionDto) {
         if (data) {
@@ -9053,7 +9110,8 @@ export class CreateLoginOptionDto implements ICreateLoginOptionDto {
             }
             this.oktaDomainName = _data["oktaDomainName"];
             this.oktaClientId = _data["oktaClientId"];
-            this.adDomainName = _data["adDomainName"];
+            this.adfsInstanceName = _data["adfsInstanceName"];
+            this.adfsClientId = _data["adfsClientId"];
         }
     }
 
@@ -9073,7 +9131,8 @@ export class CreateLoginOptionDto implements ICreateLoginOptionDto {
         }
         data["oktaDomainName"] = this.oktaDomainName;
         data["oktaClientId"] = this.oktaClientId;
-        data["adDomainName"] = this.adDomainName;
+        data["adfsInstanceName"] = this.adfsInstanceName;
+        data["adfsClientId"] = this.adfsClientId;
         return data; 
     }
 
@@ -9089,7 +9148,8 @@ export interface ICreateLoginOptionDto {
     options: string[] | undefined;
     oktaDomainName: string | undefined;
     oktaClientId: string | undefined;
-    adDomainName: string | undefined;
+    adfsInstanceName: string | undefined;
+    adfsClientId: string | undefined;
 }
 
 export class LoginOptionDto implements ILoginOptionDto {
@@ -9098,7 +9158,8 @@ export class LoginOptionDto implements ILoginOptionDto {
     loginActiveDirectory: boolean;
     oktaDomainName: string | undefined;
     oktaClientId: string | undefined;
-    adDomainName: string | undefined;
+    adfsInstanceName: string | undefined;
+    adfsClientId: string | undefined;
 
     constructor(data?: ILoginOptionDto) {
         if (data) {
@@ -9116,7 +9177,8 @@ export class LoginOptionDto implements ILoginOptionDto {
             this.loginActiveDirectory = _data["loginActiveDirectory"];
             this.oktaDomainName = _data["oktaDomainName"];
             this.oktaClientId = _data["oktaClientId"];
-            this.adDomainName = _data["adDomainName"];
+            this.adfsInstanceName = _data["adfsInstanceName"];
+            this.adfsClientId = _data["adfsClientId"];
         }
     }
 
@@ -9134,7 +9196,8 @@ export class LoginOptionDto implements ILoginOptionDto {
         data["loginActiveDirectory"] = this.loginActiveDirectory;
         data["oktaDomainName"] = this.oktaDomainName;
         data["oktaClientId"] = this.oktaClientId;
-        data["adDomainName"] = this.adDomainName;
+        data["adfsInstanceName"] = this.adfsInstanceName;
+        data["adfsClientId"] = this.adfsClientId;
         return data; 
     }
 
@@ -9152,7 +9215,8 @@ export interface ILoginOptionDto {
     loginActiveDirectory: boolean;
     oktaDomainName: string | undefined;
     oktaClientId: string | undefined;
-    adDomainName: string | undefined;
+    adfsInstanceName: string | undefined;
+    adfsClientId: string | undefined;
 }
 
 export class TenantDtoPagedResultDto implements ITenantDtoPagedResultDto {
@@ -9369,6 +9433,57 @@ export interface IAuthenticateWithOktaModel {
     userNameOrEmailAddress: string;
     oktaClientId: string | undefined;
     oktaDomainName: string | undefined;
+}
+
+export class AuthenticateWithAdfsModel implements IAuthenticateWithAdfsModel {
+    userNameOrEmailAddress: string;
+    adfsClientId: string | undefined;
+    adfsInstanceName: string | undefined;
+
+    constructor(data?: IAuthenticateWithAdfsModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userNameOrEmailAddress = _data["userNameOrEmailAddress"];
+            this.adfsClientId = _data["adfsClientId"];
+            this.adfsInstanceName = _data["adfsInstanceName"];
+        }
+    }
+
+    static fromJS(data: any): AuthenticateWithAdfsModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthenticateWithAdfsModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userNameOrEmailAddress"] = this.userNameOrEmailAddress;
+        data["adfsClientId"] = this.adfsClientId;
+        data["adfsInstanceName"] = this.adfsInstanceName;
+        return data; 
+    }
+
+    clone(): AuthenticateWithAdfsModel {
+        const json = this.toJSON();
+        let result = new AuthenticateWithAdfsModel();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAuthenticateWithAdfsModel {
+    userNameOrEmailAddress: string;
+    adfsClientId: string | undefined;
+    adfsInstanceName: string | undefined;
 }
 
 export class ExternalLoginProviderInfoModel implements IExternalLoginProviderInfoModel {

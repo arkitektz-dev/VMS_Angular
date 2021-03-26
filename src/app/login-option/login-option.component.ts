@@ -30,14 +30,14 @@ export class LoginOptionComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this._tenantServiceProxy.getLoginOptions().subscribe((result) => {
-      console.log(result);
+      // console.log(result);
     });
   }
 
   isOptionChecked(option: string): boolean {
     // just return default permission checked status
     // it's better to use a setting
-    console.log(this.options);
+    // console.log(this.options);
     if (this.options.length === 0) {
       this.options.push("normal");
     }
@@ -64,11 +64,12 @@ export class LoginOptionComponent extends AppComponentBase implements OnInit {
       this.options.splice(index, 1);
     }
 
-    console.log(this.options);
+    // console.log(this.options);
   }
 
   updateLoginOptions() {
     this.loginOptions.options = this.options;
+    // console.log(this.loginOptions);
 
     this._tenantServiceProxy
       .updateLoginOptions(this.loginOptions)

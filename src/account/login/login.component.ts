@@ -10,6 +10,8 @@ import { TenantServiceProxy } from "@shared/service-proxies/service-proxies";
 import { finalize } from "rxjs/operators";
 import { LoginOptionDto } from "../../shared/service-proxies/service-proxies";
 import * as AdfsAuthContext from "adal-angular";
+import * as Msal from "msal";
+
 
 @Component({
   templateUrl: "./login.component.html",
@@ -48,21 +50,26 @@ export class LoginComponent extends AppComponentBase {
 
           this.loginOptionDto = result;
 
-          this.oktaAuth = new OktaAuth({
-            issuer: `https://${result.oktaDomainName}`,
-            clientId: result.oktaClientId,
-            redirectUri: `http://${window.location.host}/account/login/callback`,
-            pkce: true,
-            scopes: ["openid", "profile", "email"],
-          });
+          if(this.loginOptionDto.loginOkta) {
+            this.oktaAuth = new OktaAuth({
+              issuer: `https://${result.oktaDomainName}`,
+              clientId: result.oktaClientId,
+              redirectUri: `http://${window.location.host}/account/login/callback`,
+              pkce: true,
+              scopes: ["openid", "profile", "email"],
+            });
+          }
 
-          this.adfsAuth = new AdfsAuthContext({
-            instance: "https://dc01.servicenowtrainer.com/",
-            tenant: "adfs",
-            clientId: "d418e598-14e5-49cd-ba2b-aa0225da4075",
-            redirectUri:
-              window.location.origin + "/account/login/adfs-callback",
-          });
+          if(this.loginOptionDto.loginActiveDirectory) {
+            this.adfsAuth = new AdfsAuthContext({
+              instance: `https://${result.adfsInstanceName}/`,
+              tenant: "adfs",
+              clientId: result.adfsClientId,
+              redirectUri:
+                window.location.origin + "/account/login/adfs-callback",
+            });
+          }
+
         });
     } else {
       this.loginOptionDto.loginNormal = true;

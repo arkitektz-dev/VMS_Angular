@@ -34,7 +34,7 @@ export class OktaCallbackComponent extends AppComponentBase {
           scopes: ["openid", "profile", "email"],
         });
 
-        this.authService.handleAuthentication(this.oktaAuth);
+        this.authService.handleOktaAuthentication(this.oktaAuth);
       });
   }
 }

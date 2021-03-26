@@ -13,3 +13,11 @@ export default {
   redirectUri: REDIRECT_URI,
   scopes: SCOPES.split(/\s+/),
 };
+
+
+// const adfsConfig = {
+//   instance: "https://dc01.servicenowtrainer.com/",
+//   tenant: "adfs",
+//   clientId: "d418e598-14e5-49cd-ba2b-aa0225da4075",
+//   redirectUri: window.location.origin + "/account/login/adfs-callback",
+// };

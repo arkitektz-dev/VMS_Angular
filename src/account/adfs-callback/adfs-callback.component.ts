@@ -5,6 +5,7 @@ import { AppAuthService } from "@shared/auth/app-auth.service";
 import { TenantServiceProxy } from "@shared/service-proxies/service-proxies";
 import { finalize } from "rxjs/operators";
 import * as AdfsAuthContext from "adal-angular";
+import * as Msal from "msal";
 
 @Component({
   templateUrl: "./adfs-callback.component.html",
@@ -26,14 +27,20 @@ export class AdfsCallbackComponent extends AppComponentBase {
       .getLoginOptions()
       .pipe(finalize(() => {}))
       .subscribe((result) => {
-        this.adfsAuth = new AdfsAuthContext({
-          instance: "https://dc01.servicenowtrainer.com/",
-          tenant: "adfs",
-          clientId: "d418e598-14e5-49cd-ba2b-aa0225da4075",
-          redirectUri: window.location.origin + "/account/login/adfs-callback",
-        });
-        const adfsUser = this.adfsAuth.getCachedUser();
-        console.log(adfsUser);
+        if(result.loginActiveDirectory) {
+          const adfsConfig = {
+            instance: `https://${result.adfsInstanceName}/`,
+            tenant: "adfs",
+            clientId: result.adfsClientId,
+            redirectUri: window.location.origin + "/account/login/adfs-callback",
+          };
+          this.adfsAuth = new AdfsAuthContext(adfsConfig);
+          var requestInfo = this.adfsAuth.getRequestInfo(window.location.hash);
+          if (requestInfo.valid)
+            this.adfsAuth.saveTokenFromHash(requestInfo); 
+
+          this.authService.handleAdfsAuthentication(this.adfsAuth, adfsConfig);
+        }
       });
   }
 }

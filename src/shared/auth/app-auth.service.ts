@@ -9,6 +9,7 @@ import {
   AuthenticateWithOktaModel,
   AuthenticateResultModel,
   TokenAuthServiceProxy,
+  AuthenticateWithAdfsModel,
 } from "@shared/service-proxies/service-proxies";
 import { OktaAuth } from "@okta/okta-auth-js";
 import { Observable, Observer, ReplaySubject } from "rxjs";
@@ -34,7 +35,7 @@ export class AppAuthService {
     return !!(await oktaAuth.tokenManager.get("accessToken"));
   }
 
-  async handleAuthentication(oktaAuth) {
+  async handleOktaAuthentication(oktaAuth) {
     // console.log(oktaAuth.token);
 
     const tokenContainer = await oktaAuth.token.parseFromUrl();
@@ -55,7 +56,20 @@ export class AppAuthService {
     }
   }
 
-  //
+  async handleAdfsAuthentication(adfsAuth, adfsConfig) {
+    const adfsUser = adfsAuth.getCachedUser();
+    console.log(adfsUser);
+    
+    if (adfsUser) {
+      var authenticateWithAdfsModel = new AuthenticateWithAdfsModel();
+      authenticateWithAdfsModel.userNameOrEmailAddress =
+        adfsUser.userName;
+        authenticateWithAdfsModel.adfsClientId = adfsConfig.clientId;
+      this.authenticateWithAdfs(authenticateWithAdfsModel);
+    }
+  }
+
+  ///////
 
   logout(reload?: boolean): void {
     abp.auth.clearToken();
@@ -93,6 +107,27 @@ export class AppAuthService {
 
     this._tokenAuthService
       .authenticateWithOkta(authenticateWithOktaModel)
+      .pipe(
+        finalize(() => {
+          finallyCallback();
+        })
+      )
+      .subscribe(
+        (result: AuthenticateResultModel) => {
+          this.processAuthenticateResult(result);
+        },
+        () => this._router.navigate(["account/login"])
+      );
+  }
+
+  authenticateWithAdfs(
+    authenticateWithAdfsModel: AuthenticateWithAdfsModel,
+    finallyCallback?: () => void
+  ): void {
+    finallyCallback = finallyCallback || (() => {});
+
+    this._tokenAuthService
+      .authenticateWithAdfs(authenticateWithAdfsModel)
       .pipe(
         finalize(() => {
           finallyCallback();
