@@ -63,7 +63,7 @@ export class AppAuthService {
     if (adfsUser) {
       var authenticateWithAdfsModel = new AuthenticateWithAdfsModel();
       authenticateWithAdfsModel.userNameOrEmailAddress =
-        adfsUser.userName;
+        adfsUser.userName.split('@')[0];
         authenticateWithAdfsModel.adfsClientId = adfsConfig.clientId;
       this.authenticateWithAdfs(authenticateWithAdfsModel);
     }

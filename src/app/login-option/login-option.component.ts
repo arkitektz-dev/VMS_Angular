@@ -69,7 +69,7 @@ export class LoginOptionComponent extends AppComponentBase implements OnInit {
 
   updateLoginOptions() {
     this.loginOptions.options = this.options;
-    // console.log(this.loginOptions);
+    console.log(this.loginOptions);
 
     this._tenantServiceProxy
       .updateLoginOptions(this.loginOptions)

@@ -27,6 +27,8 @@ export class AdfsCallbackComponent extends AppComponentBase {
       .getLoginOptions()
       .pipe(finalize(() => {}))
       .subscribe((result) => {
+        console.log(result);
+        
         if(result.loginActiveDirectory) {
           const adfsConfig = {
             instance: `https://${result.adfsInstanceName}/`,
@@ -36,6 +38,7 @@ export class AdfsCallbackComponent extends AppComponentBase {
           };
           this.adfsAuth = new AdfsAuthContext(adfsConfig);
           var requestInfo = this.adfsAuth.getRequestInfo(window.location.hash);
+          
           if (requestInfo.valid)
             this.adfsAuth.saveTokenFromHash(requestInfo); 
 
