@@ -1,5 +1,5 @@
 <form
-  class="form-horizontal"
+  class="needs-validation"
   autocomplete="off"
   #createStatusForm="ngForm"
   (ngSubmit)="save()"
@@ -9,33 +9,30 @@
     (onCloseClick)="bsModalRef.hide()"
   ></abp-modal-header>
   <div class="modal-body">
-   
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="statusName">
-            {{ "Status Name" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="siteName"
-              id="siteName"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="status.status"
-              #statusModel="ngModel"
-              #statusEl
-            />
-            <abp-validation-summary
-              [control]="statusModel"
-              [controlEl]="statusEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-        
-      </div>
-        
+    <div class="form-group required">
+      <label class="form-label" for="statusName">
+        {{ "Status Name" | localize }}
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="siteName"
+        id="siteName"
+        required
+        minlength="2"
+        maxlength="32"
+        [(ngModel)]="status.status"
+        #statusModel="ngModel"
+        #statusEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="statusModel"
+        [controlEl]="statusEl"
+      ></abp-validation-summary>
+    </div>
+  </div>
+
   <abp-modal-footer
     [cancelDisabled]="saving"
     [saveDisabled]="!createStatusForm.form.valid || saving"

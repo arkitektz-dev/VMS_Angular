@@ -1,5 +1,5 @@
 ﻿<form
-  class="form-horizontal"
+  class="needs-validation"
   autocomplete="off"
   #editUserModal="ngForm"
   (ngSubmit)="save()"
@@ -11,116 +11,110 @@
   <div class="modal-body">
     <tabset>
       <tab [heading]="tabDetailsTitle | localize" class="pt-3 px-2">
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="name">
-            {{ "Name" | localize }}
+        <div class="form-group required">
+          <label class="form-label" for="name">
+            {{ "Name" | localize }} <span class="text-danger">*</span>
           </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="name"
-              id="name"
-              required
-              maxlength="32"
-              [(ngModel)]="user.name"
-              #nameModel="ngModel"
-              #nameEl
-            />
-            <abp-validation-summary
-              [control]="nameModel"
-              [controlEl]="nameEl"
-            ></abp-validation-summary>
-          </div>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            name="name"
+            id="name"
+            required
+            maxlength="32"
+            [(ngModel)]="user.name"
+            #nameModel="ngModel"
+            #nameEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="nameModel"
+            [controlEl]="nameEl"
+          ></abp-validation-summary>
         </div>
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="surname">
-            {{ "Surname" | localize }}
+        <div class="form-group required">
+          <label class="form-label" for="surname">
+            {{ "Surname" | localize }} <span class="text-danger">*</span>
           </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="surname"
-              id="surname"
-              required
-              maxlength="32"
-              [(ngModel)]="user.surname"
-              #surnameModel="ngModel"
-              #surnameEl
-            />
-            <abp-validation-summary
-              [control]="surnameModel"
-              [controlEl]="surnameEl"
-            ></abp-validation-summary>
-          </div>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            name="surname"
+            id="surname"
+            required
+            maxlength="32"
+            [(ngModel)]="user.surname"
+            #surnameModel="ngModel"
+            #surnameEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="surnameModel"
+            [controlEl]="surnameEl"
+          ></abp-validation-summary>
         </div>
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="userName">
-            {{ "UserName" | localize }}
+        <div class="form-group required">
+          <label class="form-label" for="userName">
+            {{ "UserName" | localize }} <span class="text-danger">*</span>
           </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="userName"
-              id="userName"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="user.userName"
-              #userNameModel="ngModel"
-              #userNameEl
-            />
-            <abp-validation-summary
-              [control]="userNameModel"
-              [controlEl]="userNameEl"
-            ></abp-validation-summary>
-          </div>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            name="userName"
+            id="userName"
+            required
+            minlength="2"
+            maxlength="32"
+            [(ngModel)]="user.userName"
+            #userNameModel="ngModel"
+            #userNameEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="userNameModel"
+            [controlEl]="userNameEl"
+          ></abp-validation-summary>
         </div>
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="emailAddress">
-            {{ "EmailAddress" | localize }}
+        <div class="form-group required">
+          <label class="form-label" for="emailAddress">
+            {{ "EmailAddress" | localize }} <span class="text-danger">*</span>
           </label>
-          <div class="col-md-9">
-            <input
-              type="email"
-              class="form-control"
-              name="emailAddress"
-              id="emailAddress"
-              required
-              maxlength="256"
-              pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$"
-              [(ngModel)]="user.emailAddress"
-              #emailAddressModel="ngModel"
-              #emailAddressEl
-            />
-            <abp-validation-summary
-              [control]="emailAddressModel"
-              [controlEl]="emailAddressEl"
-            ></abp-validation-summary>
-          </div>
+          <input
+            type="email"
+            class="form-control form-control-sm"
+            name="emailAddress"
+            id="emailAddress"
+            required
+            maxlength="256"
+            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$"
+            [(ngModel)]="user.emailAddress"
+            #emailAddressModel="ngModel"
+            #emailAddressEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="emailAddressModel"
+            [controlEl]="emailAddressEl"
+          ></abp-validation-summary>
         </div>
-        <div class="form-group row mb-0">
-          <label class="col-md-3 col-form-label">
+        <div class="form-group mb-0">
+          <label class="form-label pr-2">
             {{ "IsActive" | localize }}
           </label>
-          <div class="col-md-9">
-            <div class="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                name="isActive"
-                id="isActive"
-                [(ngModel)]="user.isActive"
-              />
-              <label class="custom-control-label mt-2" for="isActive"></label>
-            </div>
+          <div class="custom-control custom-checkbox d-inline">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              name="isActive"
+              id="isActive"
+              [(ngModel)]="user.isActive"
+            />
+            <label class="custom-control-label" for="isActive"></label>
           </div>
         </div>
       </tab>
       <tab [heading]="tabRolesTitle | localize" class="pt-3 px-2">
-        <div class="form-group row mb-0">
+        <div class="form-group mb-0">
           <ng-container *ngFor="let role of roles; let i = index">
             <div class="col-md-6">
               <div class="custom-control custom-checkbox">

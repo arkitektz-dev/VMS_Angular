@@ -1,5 +1,5 @@
 <form
-  class="form-horizontal"
+  class="needs-validation"
   autocomplete="off"
   #createVisitorForm="ngForm"
   (ngSubmit)="save()"
@@ -9,121 +9,109 @@
     (onCloseClick)="bsModalRef.hide()"
   ></abp-modal-header>
   <div class="modal-body">
-   
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="firstName">
-            {{ "First Name" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="firstName"
-              id="firstName"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="visitor.firstName"
-              #nameModel="ngModel"
-              #nameEl
-            />
-            <abp-validation-summary
-              [control]="nameModel"
-              [controlEl]="nameEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="lastName">
-            {{ "Last Name" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="lastName"
-              id="lastName"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="visitor.lastName"
-              #displayNameModel="ngModel"
-              #displayNameEl
-            />
-            <abp-validation-summary
-              [control]="displayNameModel"
-              [controlEl]="displayNameEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-               <div class="form-group row">
-          <label class="col-md-3 col-form-label" for="company">
-            {{ "Company" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="company"
-              id="company"
-              minlength="2"
-              maxlength="100"
-              [(ngModel)]="visitor.company"
-         
-            />
-      
-          </div>
-        </div>
-               <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="emailAddress">
-            {{ "Email Address" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="emailAddress"
-              id="emailAddress"
-              minlength="2"
-              maxlength="100"
-              [(ngModel)]="visitor.emailAddress"
-              #emailModel="ngModel"
-              #emailEl
-            />
-           <abp-validation-summary
-              [control]="emailModel"
-              [controlEl]="emailEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-               <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="contactNumber">
-            {{ "Contact Number" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="contactNumber"
-              id="contactNumber"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="visitor.contactNumber"
-              #displaycontactModel="ngModel"
-              #displaycontactEl
-            />
-            <abp-validation-summary
-              [control]="displaycontactModel"
-              [controlEl]="displaycontactEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
+    <div class="form-group required">
+      <label class="form-label" for="firstName">
+        {{ "First Name" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="firstName"
+        id="firstName"
+        required
+        minlength="2"
+        maxlength="32"
+        [(ngModel)]="visitor.firstName"
+        #nameModel="ngModel"
+        #nameEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="nameModel"
+        [controlEl]="nameEl"
+      ></abp-validation-summary>
+    </div>
+    <div class="form-group required">
+      <label class="form-label" for="lastName">
+        {{ "Last Name" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="lastName"
+        id="lastName"
+        required
+        minlength="2"
+        maxlength="32"
+        [(ngModel)]="visitor.lastName"
+        #displayNameModel="ngModel"
+        #displayNameEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="displayNameModel"
+        [controlEl]="displayNameEl"
+      ></abp-validation-summary>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="company">
+        {{ "Company" | localize }}
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="company"
+        id="company"
+        minlength="2"
+        maxlength="100"
+        [(ngModel)]="visitor.company"
+      />
+    </div>
+    <div class="form-group required">
+      <label class="form-label" for="emailAddress">
+        {{ "Email Address" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="emailAddress"
+        id="emailAddress"
+        minlength="2"
+        maxlength="100"
+        [(ngModel)]="visitor.emailAddress"
+        #emailModel="ngModel"
+        #emailEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="emailModel"
+        [controlEl]="emailEl"
+      ></abp-validation-summary>
+    </div>
+    <div class="form-group required">
+      <label class="form-label" for="contactNumber">
+        {{ "Contact Number" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="contactNumber"
+        id="contactNumber"
+        required
+        minlength="2"
+        maxlength="32"
+        [(ngModel)]="visitor.contactNumber"
+        #displaycontactModel="ngModel"
+        #displaycontactEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="displaycontactModel"
+        [controlEl]="displaycontactEl"
+      ></abp-validation-summary>
+    </div>
+  </div>
 
- 
-   
-          </div>
-        
   <abp-modal-footer
     [cancelDisabled]="saving"
     [saveDisabled]="!createVisitorForm.form.valid || saving"

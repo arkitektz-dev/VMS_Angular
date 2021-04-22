@@ -1,8 +1,117 @@
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
-  <!-- <header-left-navbar></header-left-navbar> -->
-  <ul class="navbar-nav ml-auto">
-    <header-sites-menu></header-sites-menu>
-    <!-- <header-language-menu></header-language-menu> -->
-    <header-user-menu></header-user-menu>
-  </ul>
-</nav>
+<!-- <nav class="main-header navbar navbar-expand navbar-white navbar-light"> -->
+<!-- <header-left-navbar></header-left-navbar> -->
+<!-- <ul class="navbar-nav ml-auto"> -->
+<!-- <header-sites-menu></header-sites-menu> -->
+<!-- <header-language-menu></header-language-menu> -->
+<!-- <header-user-menu></header-user-menu> -->
+<!-- </ul> -->
+<!-- </nav> -->
+
+<header class="page-header" role="banner">
+  <!-- we need this logo when user switches to nav-function-top -->
+  <div class="page-logo">
+    <a
+      href="#"
+      class="page-logo-link press-scale-down d-flex align-items-center position-relative"
+      data-toggle=""
+      data-target=""
+    >
+      <img src="assets/img/logo.png" alt="" aria-roledescription="logo" />
+      <span class="page-logo-text mr-1">VMS</span>
+    </a>
+  </div>
+  <!-- DOC: nav menu layout change shortcut -->
+
+  <div class="hidden-md-down dropdown-icon-menu position-relative">
+    <a
+      href="javascript:void(0);"
+      class="header-btn btn js-waves-off"
+      data-action="toggle"
+      data-class="nav-function-hidden"
+      title="Hide Navigation"
+    >
+      <i class="ni ni-menu"></i>
+    </a>
+    <ul>
+      <li>
+        <a
+          href="javascript:void(0);"
+          class="btn js-waves-off"
+          data-action="toggle"
+          data-class="nav-function-minify"
+          title="Minify Navigation"
+        >
+          <i class="ni ni-minify-nav"></i>
+        </a>
+      </li>
+      <li>
+        <a
+          href="javascript:void(0);"
+          class="btn js-waves-off"
+          data-action="toggle"
+          data-class="nav-function-fixed"
+          title="Lock Navigation"
+        >
+          <i class="ni ni-lock-nav"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- DOC: mobile button appears during mobile width -->
+  <div class="hidden-lg-up">
+    <a
+      href="javascript:void(0);"
+      class="header-btn btn press-scale-down"
+      data-action="toggle"
+      data-class="mobile-nav-on"
+    >
+      <i class="ni ni-menu"></i>
+    </a>
+  </div>
+  <!-- <div class="search">
+    <form
+      class="app-forms hidden-xs-down"
+      role="search"
+      action="page_search.html"
+      autocomplete="off"
+    >
+      <input
+        type="text"
+        id="search-field"
+        placeholder="Search for anything"
+        class="form-control"
+        tabindex="1"
+      />
+      <a
+        href="#"
+        onclick="return false;"
+        class="btn-danger btn-search-close js-waves-off d-none"
+        data-action="toggle"
+        data-class="mobile-search-on"
+      >
+        <i class="fal fa-times"></i>
+      </a>
+    </form>
+  </div> -->
+  <div class="ml-auto d-flex">
+    <!-- activate app search icon (mobile) -->
+    <!-- <div class="hidden-sm-up">
+      <a
+        href="#"
+        class="header-icon"
+        data-action="toggle"
+        data-class="mobile-search-on"
+        data-focus="search-field"
+        title="Search"
+      >
+        <i class="fal fa-search"></i>
+      </a>
+    </div> -->
+
+    <!-- app user menu -->
+    <div>
+      <header-user-menu></header-user-menu>
+    </div>
+  </div>
+</header>

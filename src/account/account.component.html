@@ -1,5 +1,37 @@
-﻿<div class="login-box">
-  <account-header></account-header>
+﻿<div class="" style="width: 100vw">
+  <div class="page-wrapper">
+    <div class="page-inner">
+      <div class="page-content-wrapper">
+        <div class="d-flex flex-column flex-root">
+          <div
+            class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white-custom"
+          >
+            <div class="login-aside d-flex flex-column flex-row-auto">
+              <div>
+                <img
+                  class="d-block w-100"
+                  src="assets/img/demo/login_c_1.png"
+                  alt="First slide"
+                />
+              </div>
+            </div>
+            <div
+              class="login-content flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto"
+            >
+              <div
+                *ngIf="showTenantChange()"
+                style="background: aliceblue; padding: 5px; margin-top: 50px"
+              >
+                <tenant-change></tenant-change>
+              </div>
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <account-header></account-header>
   <div class="card">
     <div *ngIf="showTenantChange()" class="card-header">
       <tenant-change></tenant-change>
@@ -11,5 +43,33 @@
       <account-languages></account-languages>
     </div>
   </div>
-  <account-footer></account-footer>
+  <account-footer></account-footer> -->
 </div>
+
+<!-- <div class="page-wrapper">
+  <div class="page-inner">
+    <div class="page-content-wrapper">
+      <div class="d-flex flex-column flex-root">
+        <div
+          class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white"
+        >
+          <div class="login-aside d-flex flex-column flex-row-auto">
+            <div>
+              <img
+                class="d-block w-100"
+                src="assets/img/demo/login_c_1.png"
+                alt="First slide"
+              />
+            </div>
+          </div>
+
+          <div
+            class="login-content flex-row-fluid d-flex flex-column justify-content-center position-relative overflow-hidden p-7 mx-auto"
+          >
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

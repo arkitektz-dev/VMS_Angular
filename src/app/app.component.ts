@@ -8,6 +8,7 @@ import { LayoutStoreService } from "@shared/layout/layout-store.service";
 })
 export class AppComponent extends AppComponentBase implements OnInit {
   sidebarExpanded: boolean;
+  currentDate: string;
 
   constructor(
     injector: Injector,
@@ -21,7 +22,7 @@ export class AppComponent extends AppComponentBase implements OnInit {
     this.renderer.addClass(document.body, "sidebar-mini");
 
     SignalRAspNetCoreHelper.initSignalR();
-
+    this.currentDate = new Date().toDateString();
     abp.event.on("abp.notifications.received", (userNotification) => {
       abp.notifications.showUiNotifyForUserNotification(userNotification);
 

@@ -5819,6 +5819,13 @@
   "resolved" "https://registry.npmjs.org/ms/-/ms-2.1.1.tgz"
   "version" "2.1.1"
 
+"msal@^1.4.8":
+  "integrity" "sha512-Xsh+jiizuC5tjjK9J0RB5i/VE9CvOzBukxtxexffFQTm7vO6vqfUDB6mrsmHn5ts+rdAL89KryQFaDpVJRf4Cw=="
+  "resolved" "https://registry.npmjs.org/msal/-/msal-1.4.8.tgz"
+  "version" "1.4.8"
+  dependencies:
+    "tslib" "^1.9.3"
+
 "multicast-dns-service-types@^1.1.0":
   "integrity" "sha1-iZ8R2WhuXgXLkbNdXw5jt3PPyQE="
   "resolved" "https://registry.npmjs.org/multicast-dns-service-types/-/multicast-dns-service-types-1.1.0.tgz"
@@ -8648,7 +8655,7 @@
     "source-map-support" "^0.5.17"
     "yn" "3.1.1"
 
-"tslib@^1.10.0", "tslib@^1.13.0", "tslib@^1.8.1", "tslib@^1.9.0":
+"tslib@^1.10.0", "tslib@^1.13.0", "tslib@^1.8.1", "tslib@^1.9.0", "tslib@^1.9.3":
   "integrity" "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"

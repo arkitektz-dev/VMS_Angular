@@ -1,58 +1,156 @@
 <div [@routerTransition]>
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-6">
-          <h1>{{ "Appointment Data" | localize }}</h1>
+  <div class="row">
+    <div class="col-lg-9">
+      <div id="panel-1" class="panel">
+        <div class="panel-hdr">
+          <h1>
+            {{ "Appointment Data" | localize }}
+            <span class="fw-300"><i></i></span>
+          </h1>
         </div>
-     
       </div>
-    </div>
-  </section>
+      <div id="panel-2" class="panel">
+        <div class="panel-container show">
+          <div class="panel-content">
+            <table
+              id="dt-basic-example"
+              class="table table-bordered table-hover table-striped w-100"
+            >
+              <colgroup></colgroup>
+              <thead class="" style="text-align: center">
+                <tr></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="2">
+                    <h4 class="text-center">Visitor Information</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Visitor Name</b></td>
+                  <td>{{ appointmentData.visitorName }}</td>
+                </tr>
+                <tr>
+                  <td><b>Visitor Email</b></td>
+                  <td>{{ appointmentData.visitorEmail }}</td>
+                </tr>
+                <tr>
+                  <td><b>Visitor Contact#</b></td>
+                  <td>{{ appointmentData.visitorContact }}</td>
+                </tr>
 
-    <section class="content px-2">
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header">
-        
-        </div>
-        <div class="card-body table-responsive p-0">
-          <table class="table table-hover table-condensed text-nowrap table-bordered">
-            <thead class="bg-light">
-              
-            </thead>
-            <tbody>
-              <tr><td colspan="2"><h4 class="text-center">Visitor Information</h4></td></tr>
-              <tr><td><b>Visitor Name</b></td><td>{{appointmentData.visitorName}}</td></tr>
-               <tr><td><b>Visitor Email</b></td><td>{{appointmentData.visitorEmail}}</td></tr>
-              <tr><td><b>Visitor Contact#</b></td><td>{{appointmentData.visitorContact}}</td></tr>
+                <tr>
+                  <td colspan="2"></td>
+                </tr>
 
-              <tr><td colspan="2"></td></tr>
+                <tr>
+                  <td colspan="2">
+                    <h4 class="text-center">Appointment Information</h4>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Concerned Person</b></td>
+                  <td>{{ appointmentData.concernedPerson }}</td>
+                </tr>
+                <tr>
+                  <td><b>Date</b></td>
+                  <td>{{ appointmentData.date }}</td>
+                </tr>
+                <tr>
+                  <td><b>Time</b></td>
+                  <td>{{ appointmentData.time }}</td>
+                </tr>
+                <tr>
+                  <td><b>Arrival Instructions</b></td>
+                  <td>{{ appointmentData.arrivalInstructions }}</td>
+                </tr>
+                <tr>
+                  <td><b>Purpose of visit</b></td>
+                  <td>{{ appointmentData.purposeOfVisit }}</td>
+                </tr>
+                <tr>
+                  <td><b>Destination</b></td>
+                  <td>{{ appointmentData.destination }}</td>
+                </tr>
 
-              <tr ><td colspan="2"><h4 class="text-center">Appointment Information</h4></td></tr>
-              <tr><td><b>Concerned Person</b></td><td>{{appointmentData.concernedPerson}}</td></tr>
-              <tr><td><b>Date</b></td><td>{{appointmentData.date}}</td></tr>
-              <tr><td><b>Time</b></td><td>{{appointmentData.time}}</td></tr>
-              <tr><td><b>Arrival Instructions</b></td><td>{{appointmentData.arrivalInstructions}}</td></tr>
-              <tr><td><b>Purpose of visit</b></td><td>{{appointmentData.purposeOfVisit}}</td></tr>
-              <tr><td><b>Destination</b></td><td>{{appointmentData.destination}}</td></tr>
-
-              <tr><td><b>Status</b></td><td>
-                <select class="form-control" (change)="onChangeAttendanceStatus(appointmentData)" [(ngModel)]="appointmentData.status">
-               <option *ngFor="let status of attendanceStatus" [value]="status.status">
-                {{status.status}}
-               </option>
-              </select>
-            </td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card-footer bg-light border-top">
-          <div class="row">
-        
+                <tr>
+                  <td><b>Status</b></td>
+                  <td>
+                    <select
+                      class="form-control"
+                      (change)="onChangeAttendanceStatus(appointmentData)"
+                      [(ngModel)]="appointmentData.status"
+                    >
+                      <option
+                        *ngFor="let status of attendanceStatus"
+                        [value]="status.status"
+                      >
+                        {{ status.status }}
+                      </option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
-  </section>
   </div>
+</div>
+<!-- <section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h1>{{ "Appointment Data" | localize }}</h1>
+      </div>
+   
+    </div>
+  </div>
+</section>
+
+  <section class="content px-2">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+      
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover table-condensed text-nowrap table-bordered">
+          <thead class="bg-light">
+            
+          </thead>
+          <tbody>
+            <tr><td colspan="2"><h4 class="text-center">Visitor Information</h4></td></tr>
+            <tr><td><b>Visitor Name</b></td><td>{{appointmentData.visitorName}}</td></tr>
+             <tr><td><b>Visitor Email</b></td><td>{{appointmentData.visitorEmail}}</td></tr>
+            <tr><td><b>Visitor Contact#</b></td><td>{{appointmentData.visitorContact}}</td></tr>
+
+            <tr><td colspan="2"></td></tr>
+
+            <tr ><td colspan="2"><h4 class="text-center">Appointment Information</h4></td></tr>
+            <tr><td><b>Concerned Person</b></td><td>{{appointmentData.concernedPerson}}</td></tr>
+            <tr><td><b>Date</b></td><td>{{appointmentData.date}}</td></tr>
+            <tr><td><b>Time</b></td><td>{{appointmentData.time}}</td></tr>
+            <tr><td><b>Arrival Instructions</b></td><td>{{appointmentData.arrivalInstructions}}</td></tr>
+            <tr><td><b>Purpose of visit</b></td><td>{{appointmentData.purposeOfVisit}}</td></tr>
+            <tr><td><b>Destination</b></td><td>{{appointmentData.destination}}</td></tr>
+
+            <tr><td><b>Status</b></td><td>
+              <select class="form-control" (change)="onChangeAttendanceStatus(appointmentData)" [(ngModel)]="appointmentData.status">
+             <option *ngFor="let status of attendanceStatus" [value]="status.status">
+              {{status.status}}
+             </option>
+            </select>
+          </td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer bg-light border-top">
+        <div class="row">
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->

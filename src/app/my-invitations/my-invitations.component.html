@@ -1,227 +1,515 @@
 <div [@routerTransition]>
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-6">
-          <h1>{{ "My Invitations" | localize }}</h1>
+  <div class="row">
+    <div class="col-lg-9">
+      <div id="panel-1" class="panel">
+        <div class="panel-hdr">
+          <h1>
+            {{ "My Invitations" | localize }}
+            <span class="fw-300"><i></i></span>
+          </h1>
         </div>
-          <div class="col-6 text-right">
-          <a href="javascript:;" class="btn bg-blue" (click)="createInvitation()">
-            <i class="fa fa-plus-square"></i>
-            {{ "Create" | localize }}
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="content px-2">
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <button
-                type="button"
-                class="btn bg-blue"
-                (click)="getDataPage(1)"
-              >
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-            <input
-              type="text"
-              class="form-control"
-              name="keyword"
-              [placeholder]="'SearchWithThreeDot' | localize"
-              [(ngModel)]="keyword"
-              (keyup.enter)="getDataPage(1)"
-            />
-
-                     <div class="input-group-append">
-              <button
-                type="button"
-                class="btn btn-default"
-                (click)="advancedFiltersVisible = !advancedFiltersVisible"
-              >
-                <i
-                  class="fas"
-                  [class.fa-angle-up]="advancedFiltersVisible"
-                  [class.fa-angle-down]="!advancedFiltersVisible"
-                ></i>
-              </button>
+        <div class="panel-container show">
+          <div class="panel-content">
+            <div class="frame-wrap">
+              <div class="demo">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-info"
+                  style="width: 100px"
+                  (click)="createInvitation()"
+                >
+                  <span class="fas fa-plus-square mr-1"></span>
+                  {{ "Create" | localize }}
+                </button>
+              </div>
             </div>
           </div>
-                 <div *ngIf="advancedFiltersVisible" class="card mb-0 mt-1">
-            <div class="card-body">
-              <form class="form-horizontal">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group row mb-0">
-                      <label class="col-md-3 col-form-label">
-                        {{ "Date Range" | localize }}
-                      </label>
-                      <div class="col-md-9 pt-2">
-                        <div class="row">
-                         <div class="col-md-6">
-                 
-   <input type="text"
-         required
-          name="fromDate"
-           placeholder="MM/D/YYYY"
-           class="form-control"
-           bsDatepicker
-   
-          (ngModelChange)="onFromDateChange($event)"
-          [(ngModel)]="fromDate"
-           #fromDateModel="ngModel"
-           #fromDateEl
-           >
+        </div>
+      </div>
+      <div id="panel-2" class="panel">
+        <div class="panel-container show">
+          <div class="panel-content">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <button
+                  type="button"
+                  class="btn bg-blue"
+                  (click)="getDataPage(1)"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                name="keyword"
+                [placeholder]="'SearchWithThreeDot' | localize"
+                [(ngModel)]="keyword"
+                (keyup.enter)="getDataPage(1)"
+              />
 
-            <abp-validation-summary
-              [control]="fromDateModel"
-              [controlEl]="fromDateEl"
-            ></abp-validation-summary>                          
-                        </div>
-                        <div class="col-md-6">
-                 
-                            <input type="text"
-                    required
-                      name="toDate"
-                      placeholder="MM/D/YYYY"
-                      class="form-control"
-                      bsDatepicker
-                      [bsConfig]="{ minDate: this.minToDate  }"
-                      [(ngModel)]="toDate"
-                      #toDateModel="ngModel"
-                      #toDateEl
-                      >
+              <div class="input-group-append">
+                <button
+                  type="button"
+                  class="btn btn-default"
+                  (click)="advancedFiltersVisible = !advancedFiltersVisible"
+                >
+                  <i
+                    class="fas"
+                    [class.fa-angle-up]="advancedFiltersVisible"
+                    [class.fa-angle-down]="!advancedFiltersVisible"
+                  ></i>
+                </button>
+              </div>
+            </div>
+            <div *ngIf="advancedFiltersVisible" class="card mb-0 mt-1">
+              <div class="card-body">
+                <form class="form-horizontal">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group row mb-0">
+                        <label class="col-md-3 col-form-label">
+                          {{ "Date Range" | localize }}
+                        </label>
+                        <div class="col-md-9 pt-2">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <input
+                                type="text"
+                                required
+                                name="fromDate"
+                                placeholder="MM/D/YYYY"
+                                class="form-control"
+                                bsDatepicker
+                                (ngModelChange)="onFromDateChange($event)"
+                                [(ngModel)]="fromDate"
+                                #fromDateModel="ngModel"
+                                #fromDateEl
+                              />
 
-                        <abp-validation-summary
-                          [control]="toDateModel"
-                          [controlEl]="toDateEl"
-                        ></abp-validation-summary> 
-                          
+                              <abp-validation-summary
+                                [control]="fromDateModel"
+                                [controlEl]="fromDateEl"
+                              ></abp-validation-summary>
+                            </div>
+                            <div class="col-md-6">
+                              <input
+                                type="text"
+                                required
+                                name="toDate"
+                                placeholder="MM/D/YYYY"
+                                class="form-control"
+                                bsDatepicker
+                                [bsConfig]="{ minDate: this.minToDate }"
+                                [(ngModel)]="toDate"
+                                #toDateModel="ngModel"
+                                #toDateEl
+                              />
+
+                              <abp-validation-summary
+                                [control]="toDateModel"
+                                [controlEl]="toDateEl"
+                              ></abp-validation-summary>
+                            </div>
+                          </div>
                         </div>
-                        </div>
-                     
-                      
                       </div>
                     </div>
                   </div>
-                </div>
-              </form>
-            </div>
-            <div class="card-footer">
-              <button
-                type="button"
-                class="btn bg-blue"
-                (click)="getDataPage(1)"
-              >
-                {{ "Search" | localize }}
-              </button>
-              <button
-                type="button"
-                class="btn btn-default float-right"
-                (click)="clearFilters()"
-              >
-                {{ "Clear" | localize }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="card-body table-responsive p-0">
-          <table class="table table-hover text-nowrap" [busy]="isTableLoading">
-            <thead class="bg-light">
-              <tr>
-                <th>{{ "Vistor Name" | localize }}</th>
-                <th>{{ "Contact No" | localize }}</th>
-                <th>{{ "Email" | localize }}</th>
-                <th>{{ "Date Time" | localize }}</th>
-                <th>{{ "Status" | localize }}</th>
-
-
-                <th style="width: 200px;">{{ "Actions" | localize }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="
-                  let appointment of appointments
-                    | paginate
-                      : {
-                          id: 'server',
-                          itemsPerPage: pageSize,
-                          currentPage: pageNumber,
-                          totalItems: totalItems
-                        }
-                "
-              >
-                <td><a href="javascript:void(0)" (click)="onVisitorClick(appointment)" style="text-decoration: underline;">{{ appointment.visitor.firstName }} {{ appointment.visitor.lastName }}</a></td>
-                <td>{{ appointment.visitor.contactNumber}}</td>
-                <td>
-               {{ appointment.visitor.emailAddress}}
-                </td>
-                <td>{{appointment.date.format("MM/D/YYYY")}} {{appointment.time.format("LT")}}</td>
-                <td>
-                  <!-- <span *ngIf="appointment.isPresent==null" style="cursor: pointer;" (click)="onChangeAttendanceStatus(appointment)" class="badge badge-info">Not Marked</span>
-                  <span *ngIf="appointment.isPresent==true" style="cursor: pointer;" (click)="onChangeAttendanceStatus(appointment)"  class="badge badge-success">Yes</span>
-                  <span *ngIf="appointment.isPresent==false" style="cursor: pointer;" (click)="onChangeAttendanceStatus(appointment)"  class="badge badge-danger">No</span> -->
-                 <select class="form-control" [(ngModel)]="appointment.status" (change)="onChangeAttendanceStatus(appointment)">
-                  <option value="null">Select Status</option>
-                  <option *ngFor="let status of attendanceStatus" [value]="status.status">
-                    {{status.status}}
-                  </option>
-                 </select>
-                </td>
-
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-sm bg-secondary"
-                  (click)="editInvitation(appointment)"
-                  >
-                    <i class="fas fa-pencil-alt"></i>
-
-                    {{ "Edit" | localize }}
-                  </button>
-                           <button
-                    type="button"
-                    class="btn btn-sm bg-danger mx-2"
-                    (click)="delete(appointment)"
-                  >
-                    <i class="fas fa-trash"></i>
-                    {{ "Delete" | localize }}
-                  </button>
-                
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card-footer bg-light border-top">
-          <div class="row">
-            <div class="col-sm-4 col-12 text-sm-left text-center">
-              <button class="btn btn-secondary" (click)="refresh()">
-                <i class="fas fa-redo-alt"></i>
-              </button>
-            </div>
-            <div class="col-sm-4 col-12 text-center">
-              <p class="mb-0 my-2">
-                {{ "TotalRecordsCount" | localize: totalItems }}
-              </p>
-            </div>
-            <div class="col-sm-4 col-12">
-              <div class="float-sm-right m-auto">
-                <abp-pagination-controls
-                  id="server"
-                  (pageChange)="getDataPage($event)"
+                </form>
+              </div>
+              <div class="card-footer">
+                <button
+                  type="button"
+                  class="btn bg-blue"
+                  (click)="getDataPage(1)"
                 >
-                </abp-pagination-controls>
+                  {{ "Search" | localize }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-default float-right"
+                  (click)="clearFilters()"
+                >
+                  {{ "Clear" | localize }}
+                </button>
+              </div>
+            </div>
+            <table
+              id="dt-basic-example"
+              class="table table-bordered table-hover table-striped w-100"
+              [busy]="isTableLoading"
+            >
+              <colgroup>
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 20%" />
+                <col span="1" style="width: 20%" />
+                <col span="1" style="width: 10%" />
+                <col span="1" style="width: 20%" />
+              </colgroup>
+              <thead class="" style="text-align: center">
+                <tr>
+                  <th>{{ "Vistor Name" | localize }}</th>
+                  <th>{{ "Contact No" | localize }}</th>
+                  <th>{{ "Email" | localize }}</th>
+                  <th>{{ "Date Time" | localize }}</th>
+                  <th>{{ "Status" | localize }}</th>
+                  <th>{{ "Actions" | localize }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let appointment of appointments
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }
+                  "
+                >
+                  <td>
+                    <center>
+                      <a
+                        href="javascript:void(0)"
+                        (click)="onVisitorClick(appointment)"
+                        style="text-decoration: underline"
+                        >{{ appointment.visitor.firstName }}
+                        {{ appointment.visitor.lastName }}</a
+                      >
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      {{ appointment.visitor.contactNumber }}
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      {{ appointment.visitor.emailAddress }}
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      {{ appointment.date.format("MM/D/YYYY") }}
+                      {{ appointment.time.format("LT") }}
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      <select
+                        class="form-control"
+                        [(ngModel)]="appointment.status"
+                        (change)="onChangeAttendanceStatus(appointment)"
+                      >
+                        <option value="null">Select Status</option>
+                        <option
+                          *ngFor="let status of attendanceStatus"
+                          [value]="status.status"
+                        >
+                          {{ status.status }}
+                        </option>
+                      </select>
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      <a
+                        href="javascript:void(0);"
+                        data-toggle="tooltip"
+                        title="Edit"
+                        class="btn btn-sm btn-info btn-icon waves-effect waves-themed"
+                        style="margin-right: 5px"
+                        (click)="editInvitation(appointment)"
+                      >
+                        <i class="fas fa-pencil"></i
+                      ></a>
+                      <a
+                        href="javascript:void(0);"
+                        data-toggle="tooltip"
+                        title="Delete"
+                        class="btn btn-sm btn-danger btn-icon waves-effect waves-themed"
+                        style="margin-right: 5px"
+                        (click)="delete(appointment)"
+                      >
+                        <i class="fas fa-times"></i
+                      ></a>
+                    </center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-sm-4 col-12 text-sm-left text-center">
+                <button class="btn btn-secondary" (click)="refresh()">
+                  <i class="fas fa-redo-alt"></i>
+                </button>
+              </div>
+              <div class="col-sm-4 col-12 text-center">
+                <p class="mb-0 my-2">
+                  {{ "TotalRecordsCount" | localize: totalItems }}
+                </p>
+              </div>
+              <div class="col-sm-4 col-12">
+                <div class="float-sm-right m-auto">
+                  <abp-pagination-controls
+                    id="server"
+                    (pageChange)="getDataPage($event)"
+                  >
+                  </abp-pagination-controls>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <div class="col-lg-3">
+      <div class="fs-lg fw-300 p-2 bg-white border-faded rounded mb-g">
+        <h3 class="mb-g">{{ "My Invitations" | localize }}</h3>
+        <p>
+          This option displays the list of users with access rights for this
+          application.
+        </p>
+        <p>
+          The privileged user can assign the user access roles, update the
+          user's password, edit the details and delete the user from accessing
+          this system.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- <section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h1>{{ "My Invitations" | localize }}</h1>
+      </div>
+      <div class="col-6 text-right">
+        <a href="javascript:;" class="btn bg-blue" (click)="createInvitation()">
+          <i class="fa fa-plus-square"></i>
+          {{ "Create" | localize }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content px-2">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="keyword"
+            [placeholder]="'SearchWithThreeDot' | localize"
+            [(ngModel)]="keyword"
+            (keyup.enter)="getDataPage(1)"
+          />
+
+          <div class="input-group-append">
+            <button
+              type="button"
+              class="btn btn-default"
+              (click)="advancedFiltersVisible = !advancedFiltersVisible"
+            >
+              <i
+                class="fas"
+                [class.fa-angle-up]="advancedFiltersVisible"
+                [class.fa-angle-down]="!advancedFiltersVisible"
+              ></i>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="advancedFiltersVisible" class="card mb-0 mt-1">
+          <div class="card-body">
+            <form class="form-horizontal">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row mb-0">
+                    <label class="col-md-3 col-form-label">
+                      {{ "Date Range" | localize }}
+                    </label>
+                    <div class="col-md-9 pt-2">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <input
+                            type="text"
+                            required
+                            name="fromDate"
+                            placeholder="MM/D/YYYY"
+                            class="form-control"
+                            bsDatepicker
+                            (ngModelChange)="onFromDateChange($event)"
+                            [(ngModel)]="fromDate"
+                            #fromDateModel="ngModel"
+                            #fromDateEl
+                          />
+
+                          <abp-validation-summary
+                            [control]="fromDateModel"
+                            [controlEl]="fromDateEl"
+                          ></abp-validation-summary>
+                        </div>
+                        <div class="col-md-6">
+                          <input
+                            type="text"
+                            required
+                            name="toDate"
+                            placeholder="MM/D/YYYY"
+                            class="form-control"
+                            bsDatepicker
+                            [bsConfig]="{ minDate: this.minToDate }"
+                            [(ngModel)]="toDate"
+                            #toDateModel="ngModel"
+                            #toDateEl
+                          />
+
+                          <abp-validation-summary
+                            [control]="toDateModel"
+                            [controlEl]="toDateEl"
+                          ></abp-validation-summary>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+              {{ "Search" | localize }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-default float-right"
+              (click)="clearFilters()"
+            >
+              {{ "Clear" | localize }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap" [busy]="isTableLoading">
+          <thead class="bg-light">
+            <tr>
+              <th>{{ "Vistor Name" | localize }}</th>
+              <th>{{ "Contact No" | localize }}</th>
+              <th>{{ "Email" | localize }}</th>
+              <th>{{ "Date Time" | localize }}</th>
+              <th>{{ "Status" | localize }}</th>
+
+              <th style="width: 200px">{{ "Actions" | localize }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let appointment of appointments
+                  | paginate
+                    : {
+                        id: 'server',
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber,
+                        totalItems: totalItems
+                      }
+              "
+            >
+              <td>
+                <a
+                  href="javascript:void(0)"
+                  (click)="onVisitorClick(appointment)"
+                  style="text-decoration: underline"
+                  >{{ appointment.visitor.firstName }}
+                  {{ appointment.visitor.lastName }}</a
+                >
+              </td>
+              <td>{{ appointment.visitor.contactNumber }}</td>
+              <td>
+                {{ appointment.visitor.emailAddress }}
+              </td>
+              <td>
+                {{ appointment.date.format("MM/D/YYYY") }}
+                {{ appointment.time.format("LT") }}
+              </td>
+              <td>
+                //<span *ngIf="appointment.isPresent==null" style="cursor: pointer;" (click)="onChangeAttendanceStatus(appointment)" class="badge badge-info">Not Marked</span>
+                //<span *ngIf="appointment.isPresent==true" style="cursor: pointer;" (click)="onChangeAttendanceStatus(appointment)"  class="badge badge-success">Yes</span>
+                //<span *ngIf="appointment.isPresent==false" style="cursor: pointer;" (click)="onChangeAttendanceStatus(appointment)"  class="badge badge-danger">No</span>
+                <select
+                  class="form-control"
+                  [(ngModel)]="appointment.status"
+                  (change)="onChangeAttendanceStatus(appointment)"
+                >
+                  <option value="null">Select Status</option>
+                  <option
+                    *ngFor="let status of attendanceStatus"
+                    [value]="status.status"
+                  >
+                    {{ status.status }}
+                  </option>
+                </select>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm bg-secondary"
+                  (click)="editInvitation(appointment)"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+
+                  {{ "Edit" | localize }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm bg-danger mx-2"
+                  (click)="delete(appointment)"
+                >
+                  <i class="fas fa-trash"></i>
+                  {{ "Delete" | localize }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer bg-light border-top">
+        <div class="row">
+          <div class="col-sm-4 col-12 text-sm-left text-center">
+            <button class="btn btn-secondary" (click)="refresh()">
+              <i class="fas fa-redo-alt"></i>
+            </button>
+          </div>
+          <div class="col-sm-4 col-12 text-center">
+            <p class="mb-0 my-2">
+              {{ "TotalRecordsCount" | localize: totalItems }}
+            </p>
+          </div>
+          <div class="col-sm-4 col-12">
+            <div class="float-sm-right m-auto">
+              <abp-pagination-controls
+                id="server"
+                (pageChange)="getDataPage($event)"
+              >
+              </abp-pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->

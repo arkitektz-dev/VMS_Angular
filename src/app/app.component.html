@@ -1,4 +1,4 @@
-<div class="wrapper">
+<!-- <div class="wrapper">
   <app-header></app-header>
   <sidebar></sidebar>
   <div class="content-wrapper">
@@ -6,4 +6,26 @@
   </div>
   <app-footer></app-footer>
   <div id="sidebar-overlay" (click)="toggleSidebar()"></div>
+</div> -->
+
+<div class="page-wrapper">
+  <div class="page-inner">
+    <sidebar></sidebar>
+    <div class="page-content-wrapper">
+      <app-header></app-header>
+      <main id="js-page-content" role="main" class="page-content">
+        <ol class="breadcrumb page-breadcrumb">
+          <li class="position-absolute pos-top pos-right d-none d-sm-block">
+            <span class="js-get-date">{{ currentDate }}</span>
+          </li>
+        </ol>
+        <router-outlet></router-outlet>
+      </main>
+      <div
+        class="page-content-overlay"
+        data-action="toggle"
+        data-class="mobile-nav-on"
+      ></div>
+    </div>
+  </div>
 </div>
