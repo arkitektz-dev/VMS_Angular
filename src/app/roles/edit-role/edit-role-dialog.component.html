@@ -1,5 +1,5 @@
 <form
-  class="form-horizontal"
+  class="needs-validation"
   autocomplete="off"
   #editRoleForm="ngForm"
   (ngSubmit)="save()"
@@ -11,73 +11,69 @@
   <div class="modal-body">
     <tabset>
       <tab [heading]="'Details' | localize" class="pt-3 px-2">
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="name">
-            {{ "Name" | localize }}
+        <div class="form-group required">
+          <label class="form-label" for="name">
+            {{ "Name" | localize }} <span class="text-danger">*</span>
           </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="name"
-              id="name"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="role.name"
-              #nameModel="ngModel"
-              #nameEl
-            />
-            <abp-validation-summary
-              [control]="nameModel"
-              [controlEl]="nameEl"
-            ></abp-validation-summary>
-          </div>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            name="name"
+            id="name"
+            required
+            minlength="2"
+            maxlength="32"
+            [(ngModel)]="role.name"
+            #nameModel="ngModel"
+            #nameEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="nameModel"
+            [controlEl]="nameEl"
+          ></abp-validation-summary>
         </div>
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="displayName">
-            {{ "DisplayName" | localize }}
+        <div class="form-group required">
+          <label class="form-label" for="displayName">
+            {{ "DisplayName" | localize }} <span class="text-danger">*</span>
           </label>
-          <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="displayName"
-              id="displayName"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="role.displayName"
-              #displayNameModel="ngModel"
-              #displayNameEl
-            />
-            <abp-validation-summary
-              [control]="displayNameModel"
-              [controlEl]="displayNameEl"
-            ></abp-validation-summary>
-          </div>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            name="displayName"
+            id="displayName"
+            required
+            minlength="2"
+            maxlength="32"
+            [(ngModel)]="role.displayName"
+            #displayNameModel="ngModel"
+            #displayNameEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="displayNameModel"
+            [controlEl]="displayNameEl"
+          ></abp-validation-summary>
         </div>
-        <div class="form-group row mb-0">
-          <label class="col-md-3 col-form-label" for="description">
+        <div class="form-group mb-0">
+          <label class="form-label" for="description">
             {{ "RoleDescription" | localize }}
           </label>
-          <div class="col-md-9">
-            <textarea
-              type="text"
-              class="form-control"
-              name="description"
-              id="description"
-              [(ngModel)]="role.description"
-            >
-            </textarea>
-          </div>
+          <textarea
+            type="text"
+            class="form-control form-control-sm"
+            name="description"
+            id="description"
+            [(ngModel)]="role.description"
+          >
+          </textarea>
         </div>
       </tab>
       <tab [heading]="'Permissions' | localize" class="pt-3 px-2">
-        <div class="form-group row mb-0">
+        <div class="form-group mb-0">
           <ng-container *ngFor="let permission of permissions; let i = index">
             <div class="col-md-6">
-              <div class="custom-control custom-checkbox">
+              <div class="custom-control custom-checkbox mb-1">
                 <input
                   type="checkbox"
                   class="custom-control-input"
