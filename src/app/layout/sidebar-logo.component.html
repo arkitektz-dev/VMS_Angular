@@ -1,4 +1,4 @@
-<a class="brand-link" [routerLink]="['home']">
+<!-- <a class="brand-link" [routerLink]="['home']">
   <img
     src="assets/img/logo.png"
     alt="Logo"
@@ -6,4 +6,23 @@
     style="opacity: 0.8;"
   />
   <span class="brand-text font-weight-light">VMS</span>
-</a>
+</a> -->
+<div class="page-logo">
+  <a
+    [routerLink]="['home']"
+    class="page-logo-link press-scale-down d-flex align-items-center position-relative"
+    data-toggle=""
+    data-target=""
+  >
+    <div class="d-inline-block align-middle mr-1">
+      <span
+        class="profile-image profile-image-md rounded-circle d-block mt-1"
+        style="
+          background-image: url('assets/img/logo.png');
+          background-size: cover;
+        "
+      ></span>
+    </div>
+    <span class="page-logo-text mr-1">VMS</span>
+  </a>
+</div>

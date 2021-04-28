@@ -34,11 +34,13 @@ import { LoginOptionComponent } from "./login-option/login-option.component";
           {
             path: "download",
             component: DownloadSetupComponent,
+            data: { permission: "Pages.DownloadProbeApplication" },
             canActivate: [AppRouteGuard],
           },
           {
             path: "loginOption",
             component: LoginOptionComponent,
+            data: { permission: "Pages.LoginOptions" },
             canActivate: [AppRouteGuard],
           },
           {

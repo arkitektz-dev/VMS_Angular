@@ -1,4 +1,116 @@
 <form
+  class="needs-validation"
+  autocomplete="off"
+  #createTenantForm="ngForm"
+  (ngSubmit)="save()"
+>
+  <abp-modal-header
+    [title]="'CreateNewTenant' | localize"
+    (onCloseClick)="bsModalRef.hide()"
+  ></abp-modal-header>
+  <div class="modal-body">
+    <div class="form-group required">
+      <label class="form-label" for="tenancyName">
+        {{ "TenancyName" | localize }} <span class="text-danger">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="tenancyName"
+        id="tenancyName"
+        minlength="2"
+        maxlength="64"
+        required
+        [(ngModel)]="tenant.tenancyName"
+        #tenancyNameModel="ngModel"
+        #tenancyNameEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="tenancyNameModel"
+        [controlEl]="tenancyNameEl"
+      ></abp-validation-summary>
+    </div>
+    <div class="form-group required">
+      <label class="form-label" for="name">
+        {{ "Name" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="name"
+        id="name"
+        maxlength="128"
+        required
+        [(ngModel)]="tenant.name"
+        #nameModel="ngModel"
+        #nameEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="nameModel"
+        [controlEl]="nameEl"
+      ></abp-validation-summary>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="connectionString">
+        {{ "DatabaseConnectionString" | localize }}
+      </label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        name="connectionString"
+        id="connectionString"
+        maxlength="1024"
+        [(ngModel)]="tenant.connectionString"
+      />
+    </div>
+    <div class="form-group required">
+      <label class="form-label" for="adminEmailAddress">
+        {{ "AdminEmailAddress" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="email"
+        class="form-control form-control-sm"
+        name="adminEmailAddress"
+        id="adminEmailAddress"
+        pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,})+$"
+        maxlength="256"
+        required
+        [(ngModel)]="tenant.adminEmailAddress"
+        #adminEmailAddressModel="ngModel"
+        #adminEmailAddressEl
+      />
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="adminEmailAddressModel"
+        [controlEl]="adminEmailAddressEl"
+      ></abp-validation-summary>
+    </div>
+    <div class="form-group">
+      <label class="form-label pr-2">
+        {{ "IsActive" | localize }}
+      </label>
+      <div class="custom-control custom-checkbox d-inline">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          name="isActive"
+          id="isActive"
+          [(ngModel)]="tenant.isActive"
+        />
+        <label class="custom-control-label" for="isActive"></label>
+      </div>
+    </div>
+  </div>
+  <abp-modal-footer
+    [cancelDisabled]="saving"
+    [saveDisabled]="!createTenantForm.form.valid || saving"
+    (onCancelClick)="bsModalRef.hide()"
+  ></abp-modal-footer>
+</form>
+
+<!-- <form
   class="form-horizontal"
   autocomplete="off"
   #createTenantForm="ngForm"
@@ -118,4 +230,4 @@
     [saveDisabled]="!createTenantForm.form.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
   ></abp-modal-footer>
-</form>
+</form>  -->

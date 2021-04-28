@@ -1,116 +1,281 @@
 <div [@routerTransition]>
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-6">
-          <h1>{{ "Sites" | localize }}</h1>
+  <div class="row">
+    <div class="col-lg-9">
+      <div id="panel-1" class="panel">
+        <div class="panel-hdr">
+          <h1>
+            {{ "Sites" | localize }} <span class="fw-300"><i></i></span>
+          </h1>
         </div>
-        <div class="col-6 text-right">
-          <a href="javascript:;" class="btn bg-blue" (click)="createSite()">
-            <i class="fa fa-plus-square"></i>
-            {{ "Create" | localize }}
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="content px-2">
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <button
-                type="button"
-                class="btn bg-blue"
-                (click)="getDataPage(1)"
-              >
-                <i class="fas fa-search"></i>
-              </button>
+        <div class="panel-container show">
+          <div class="panel-content">
+            <div class="frame-wrap">
+              <div class="demo">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-info"
+                  style="width: 100px"
+                  (click)="createSite()"
+                >
+                  <span class="fas fa-plus-square mr-1"></span>
+                  {{ "Create" | localize }}
+                </button>
+              </div>
             </div>
-            <input
-              type="text"
-              class="form-control"
-              name="keyword"
-              [placeholder]="'SearchWithThreeDot' | localize"
-              [(ngModel)]="keyword"
-              (keyup.enter)="getDataPage(1)"
-            />
           </div>
         </div>
-        <div class="card-body table-responsive p-0">
-          <table class="table table-hover text-nowrap" [busy]="isTableLoading">
-            <thead class="bg-light">
-              <tr>
-                <th>{{ "Site Name" | localize }}</th>
-                <th>{{ "Site Name Prefix" | localize }}</th>
+      </div>
 
-                <th style="width: 200px;">{{ "Actions" | localize }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="
-                  let site of sites
-                    | paginate
-                      : {
-                          id: 'server',
-                          itemsPerPage: pageSize,
-                          currentPage: pageNumber,
-                          totalItems: totalItems
-                        }
-                "
-              >
-                <td>{{ site.siteName }}</td>
-                <td>{{ site.siteNamePrefix }}</td>
-
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-sm bg-secondary"
-                    (click)="editSite(site)"
-                  >
-                    <i class="fas fa-pencil-alt"></i>
-                  
-                    {{ "Edit" | localize }}
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-sm bg-danger mx-2"
-                    (click)="delete(site)"
-                  >
-                    <i class="fas fa-trash"></i>
-                    {{ "Delete" | localize }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card-footer bg-light border-top">
-          <div class="row">
-            <div class="col-sm-4 col-12 text-sm-left text-center">
-              <button class="btn btn-secondary" (click)="refresh()">
-                <i class="fas fa-redo-alt"></i>
-              </button>
-            </div>
-            <div class="col-sm-4 col-12 text-center">
-              <p class="mb-0 my-2">
-                {{ "TotalRecordsCount" | localize: totalItems }}
-              </p>
-            </div>
-            <div class="col-sm-4 col-12">
-              <div class="float-sm-right m-auto">
-                <abp-pagination-controls
-                  id="server"
-                  (pageChange)="getDataPage($event)"
+      <div id="panel-2" class="panel">
+        <div class="panel-container show">
+          <div class="panel-content">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <button
+                  type="button"
+                  class="btn bg-blue"
+                  (click)="getDataPage(1)"
                 >
-                </abp-pagination-controls>
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                name="keyword"
+                [placeholder]="'SearchWithThreeDot' | localize"
+                [(ngModel)]="keyword"
+                (keyup.enter)="getDataPage(1)"
+              />
+            </div>
+            <table
+              id="dt-basic-example"
+              class="table table-bordered table-hover table-striped w-100"
+              [busy]="isTableLoading"
+            >
+              <colgroup>
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 20%" />
+                <col span="1" style="width: 20%" />
+                <col span="1" style="width: 10%" />
+                <col span="1" style="width: 20%" />
+              </colgroup>
+              <thead class="" style="text-align: center">
+                <tr>
+                  <th>{{ "Site Name" | localize }}</th>
+                  <th>{{ "Site Name Prefix" | localize }}</th>
+                  <th>{{ "Actions" | localize }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let site of sites
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }
+                  "
+                >
+                  <td>
+                    <center>{{ site.siteName }}</center>
+                  </td>
+                  <td>
+                    <center>{{ site.siteNamePrefix }}</center>
+                  </td>
+                  <td>
+                    <center>
+                      <a
+                        href="javascript:void(0);"
+                        data-toggle="tooltip"
+                        title="Edit"
+                        class="btn btn-sm btn-info btn-icon waves-effect waves-themed"
+                        style="margin-right: 5px"
+                        (click)="editSite(site)"
+                      >
+                        <i class="fas fa-pencil"></i
+                      ></a>
+                      <a
+                        href="javascript:void(0);"
+                        data-toggle="tooltip"
+                        title="Delete"
+                        class="btn btn-sm btn-danger btn-icon waves-effect waves-themed"
+                        style="margin-right: 5px"
+                        (click)="delete(site)"
+                      >
+                        <i class="fas fa-times"></i
+                      ></a>
+                      <a
+                        href="javascript:void(0);"
+                        data-toggle="tooltip"
+                        title="ResetPassword"
+                        class="btn btn-sm btn-danger btn-icon waves-effect waves-themed"
+                        style="margin-right: 5px"
+                        (click)="resetPassword(user)"
+                      >
+                        <i class="fas fa-lock"></i
+                      ></a>
+                    </center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-sm-4 col-12 text-sm-left text-center">
+                <button class="btn btn-secondary" (click)="refresh()">
+                  <i class="fas fa-redo-alt"></i>
+                </button>
+              </div>
+              <div class="col-sm-4 col-12 text-center">
+                <p class="mb-0 my-2">
+                  {{ "TotalRecordsCount" | localize: totalItems }}
+                </p>
+              </div>
+              <div class="col-sm-4 col-12">
+                <div class="float-sm-right m-auto">
+                  <abp-pagination-controls
+                    id="server"
+                    (pageChange)="getDataPage($event)"
+                  >
+                  </abp-pagination-controls>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <div class="col-lg-3">
+      <div class="fs-lg fw-300 p-2 bg-white border-faded rounded mb-g">
+        <h3 class="mb-g">{{ "Sites" | localize }}</h3>
+        <p>
+          This option displays the list of users with access rights for this
+          application.
+        </p>
+        <p>
+          The privileged user can assign the user access roles, update the
+          user's password, edit the details and delete the user from accessing
+          this system.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
+<!-- <section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h1>{{ "Sites" | localize }}</h1>
+      </div>
+      <div class="col-6 text-right">
+        <a href="javascript:;" class="btn bg-blue" (click)="createSite()">
+          <i class="fa fa-plus-square"></i>
+          {{ "Create" | localize }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content px-2">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <button
+              type="button"
+              class="btn bg-blue"
+              (click)="getDataPage(1)"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="keyword"
+            [placeholder]="'SearchWithThreeDot' | localize"
+            [(ngModel)]="keyword"
+            (keyup.enter)="getDataPage(1)"
+          />
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap" [busy]="isTableLoading">
+          <thead class="bg-light">
+            <tr>
+              <th>{{ "Site Name" | localize }}</th>
+              <th>{{ "Site Name Prefix" | localize }}</th>
+
+              <th style="width: 200px;">{{ "Actions" | localize }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let site of sites
+                  | paginate
+                    : {
+                        id: 'server',
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber,
+                        totalItems: totalItems
+                      }
+              "
+            >
+              <td>{{ site.siteName }}</td>
+              <td>{{ site.siteNamePrefix }}</td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm bg-secondary"
+                  (click)="editSite(site)"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                
+                  {{ "Edit" | localize }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm bg-danger mx-2"
+                  (click)="delete(site)"
+                >
+                  <i class="fas fa-trash"></i>
+                  {{ "Delete" | localize }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer bg-light border-top">
+        <div class="row">
+          <div class="col-sm-4 col-12 text-sm-left text-center">
+            <button class="btn btn-secondary" (click)="refresh()">
+              <i class="fas fa-redo-alt"></i>
+            </button>
+          </div>
+          <div class="col-sm-4 col-12 text-center">
+            <p class="mb-0 my-2">
+              {{ "TotalRecordsCount" | localize: totalItems }}
+            </p>
+          </div>
+          <div class="col-sm-4 col-12">
+            <div class="float-sm-right m-auto">
+              <abp-pagination-controls
+                id="server"
+                (pageChange)="getDataPage($event)"
+              >
+              </abp-pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->

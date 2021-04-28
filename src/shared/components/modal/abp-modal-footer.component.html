@@ -1,4 +1,4 @@
-<div class="modal-footer justify-content-between">
+<!-- <div class="modal-footer justify-content-between">
   <button
     type="button"
     class="btn btn-default"
@@ -8,6 +8,20 @@
     {{ cancelLabel }}
   </button>
   <button type="submit" class="btn btn-primary" [disabled]="saveDisabled">
+    {{ saveLabel }}
+  </button>
+</div> -->
+
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    [disabled]="cancelDisabled"
+    (click)="onCancelClick.emit()"
+  >
+    {{ cancelLabel }}
+  </button>
+  <button type="submit" class="btn btn-info" [disabled]="saveDisabled">
     {{ saveLabel }}
   </button>
 </div>

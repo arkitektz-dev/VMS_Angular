@@ -1,5 +1,5 @@
 <form
-  class="form-horizontal"
+  class="needs-validation"
   autocomplete="off"
   #editAppointmentForm="ngForm"
   (ngSubmit)="save()"
@@ -9,183 +9,165 @@
     (onCloseClick)="bsModalRef.hide()"
   ></abp-modal-header>
   <div class="modal-body">
-   
-  
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="vistorName">
-            {{ "Visitor Name" | localize }}
-          </label>
-          <div class="col-md-9">
+    <div class="form-group required">
+      <label class="form-label" for="vistorName">
+        {{ "Visitor Name" | localize }} <span class="text-danger">*</span>
+      </label>
+      <ng-select
+        [items]="visitors$ | async"
+        name="fullNameWithContactNumber"
+        bindLabel="fullNameWithContactNumber"
+        bindValue="id"
+        [hideSelected]="true"
+        [trackByFn]="trackByFn"
+        [loading]="visitorLoading"
+        [compareWith]="compareWith"
+        (change)="OnChangeVisitor(appointment, 'onControlChange')"
+        typeToSearchText="Please enter 2 or more characters"
+        [typeahead]="visitorInput$"
+        [(ngModel)]="appointment.visitor"
+        #vistorNameModel="ngModel"
+        required
+        #vistorNameEl
+      >
+      </ng-select>
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="vistorNameModel"
+        [controlEl]="vistorNameEl"
+      ></abp-validation-summary>
+    </div>
 
+    <div class="form-group required">
+      <label class="form-label" for="employeeName">
+        {{ "Employee" | localize }} <span class="text-danger">*</span>
+      </label>
+      <ng-select
+        [items]="employee$"
+        name="employeeName"
+        bindLabel="fullName"
+        bindValue="id"
+        [searchable]="true"
+        [hideSelected]="true"
+        typeToSearchText="Please enter 2 or more characters"
+        [(ngModel)]="appointment.employeeId"
+        #employeeNameModel="ngModel"
+        #employeeNameEl
+        required
+      >
+      </ng-select>
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="employeeNameModel"
+        [controlEl]="employeeNameEl"
+      ></abp-validation-summary>
+    </div>
 
- <ng-select [items]="visitors$ | async"
-            name="fullNameWithContactNumber"
-           bindLabel="fullNameWithContactNumber"
-           bindValue="id"
-           [hideSelected]="true"
-           [trackByFn]="trackByFn"
-           [loading]="visitorLoading"
-           [compareWith]="compareWith"
-           (change)="OnChangeVisitor(appointment,'onControlChange')"
-           typeToSearchText="Please enter 2 or more characters"
-           [typeahead]="visitorInput$"
-           [(ngModel)]="appointment.visitor"
-           #vistorNameModel="ngModel"
-           required
-           #vistorNameEl
-           >
-</ng-select>
-            <abp-validation-summary
-              [control]="vistorNameModel"
-              [controlEl]="vistorNameEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
+    <div class="form-group">
+      <label class="form-label" for="purposeOfVisit">
+        {{ "Purpose Of Visit" | localize }}
+      </label>
+      <input
+        type="text"
+        name="purposeOfVisit"
+        placeholder=""
+        class="form-control form-control-sm"
+        [(ngModel)]="appointment.purposeOfVisit"
+        #purposeOfVisitModel="ngModel"
+        #purposeOfVisitEl
+      />
 
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="purposeOfVisitModel"
+        [controlEl]="purposeOfVisitEl"
+      ></abp-validation-summary>
+    </div>
 
-                <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="employeeName">
-            {{ "Employee" | localize }}
-          </label>
-          <div class="col-md-9">
+    <div class="form-group">
+      <label class="form-label" for="arrivalInstructions">
+        {{ "Arrival Instructions" | localize }}
+      </label>
+      <textarea
+        class="form-control form-control-sm"
+        name="arrivalInstructions"
+        [(ngModel)]="appointment.arrivalInstructions"
+        #arrivalInstructionsModel="ngModel"
+        #arrivalInstructionsEl
+      >
+      </textarea>
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="arrivalInstructionsModel"
+        [controlEl]="arrivalInstructionsEl"
+      ></abp-validation-summary>
+    </div>
 
+    <div class="form-group">
+      <label class="form-label" for="destination">
+        {{ "Destination" | localize }}
+      </label>
+      <input
+        type="text"
+        name="destination"
+        placeholder=""
+        class="form-control form-control-sm"
+        [(ngModel)]="appointment.destination"
+        #destinationModel="ngModel"
+        #destinationEl
+      />
 
- <ng-select [items]="employee$"
-            name="employeeName"
-           bindLabel="fullName"
-           bindValue="id"
-           [searchable]="true"
-           [hideSelected]="true"
-           typeToSearchText="Please enter 2 or more characters"
-           [(ngModel)]="appointment.employeeId"
-           #employeeNameModel="ngModel"
-           #employeeNameEl
-            required
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="destinationModel"
+        [controlEl]="destinationEl"
+      ></abp-validation-summary>
+    </div>
 
-           >
-</ng-select>
-            <abp-validation-summary
-              [control]="employeeNameModel"
-              [controlEl]="employeeNameEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
+    <div class="form-group required">
+      <label class="form-label" for="date">
+        {{ "Date" | localize }} <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        required
+        name="date"
+        placeholder="MM/D/YYYY"
+        class="form-control form-control-sm"
+        bsDatepicker
+        [(ngModel)]="appointment.date"
+        [(bsValue)]="appointmentDateVal"
+        #dateModel="ngModel"
+        #dateEl
+      />
 
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="dateModel"
+        [controlEl]="dateEl"
+      ></abp-validation-summary>
+    </div>
 
-     <div  class="form-group row">
-          <label class="col-md-3 col-form-label" for="purposeOfVisit">
-            {{ "Purpose Of Visit" | localize }}
-          </label>
-          <div class="col-md-9">
+    <div class="form-group required">
+      <label class="form-label" for="time">
+        {{ "Time" | localize }} <span class="text-danger">*</span>
+      </label>
+      <timepicker
+        [(ngModel)]="appointmentTimeVal"
+        name="time"
+        required
+        #timeModel="ngModel"
+        #timeEl
+      ></timepicker>
 
-        <input type="text"
-          name="purposeOfVisit"
-           placeholder=""
-           class="form-control"
-          [(ngModel)]="appointment.purposeOfVisit"
-           #purposeOfVisitModel="ngModel"
-           #purposeOfVisitEl
-           >
+      <abp-validation-summary
+        class="invalid-feedback"
+        [control]="timeModel"
+        [controlEl]="timeEl"
+      ></abp-validation-summary>
+    </div>
+  </div>
 
-            <abp-validation-summary
-              [control]="purposeOfVisitModel"
-              [controlEl]="purposeOfVisitEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-
-          <div class="form-group row">
-          <label class="col-md-3 col-form-label" for="arrivalInstructions">
-            {{ "Arrival Instructions" | localize }}
-          </label>
-          <div class="col-md-9">
-
- 
-            <textarea class="form-control" 
-                name="arrivalInstructions"
-             [(ngModel)]="appointment.arrivalInstructions"
-            #arrivalInstructionsModel="ngModel"
-           #arrivalInstructionsEl>
-
-            </textarea>
-            <abp-validation-summary
-              [control]="arrivalInstructionsModel"
-              [controlEl]="arrivalInstructionsEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-
-            <div  class="form-group row">
-          <label class="col-md-3 col-form-label" for="destination">
-            {{ "Destination" | localize }}
-          </label>
-          <div class="col-md-9">
-
-        <input type="text"
-          name="destination"
-           placeholder=""
-           class="form-control"
-          [(ngModel)]="appointment.destination"
-           #destinationModel="ngModel"
-           #destinationEl
-           >
-
-            <abp-validation-summary
-              [control]="destinationModel"
-              [controlEl]="destinationEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-
-
-     <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="date">
-            {{ "Date" | localize }}
-          </label>
-          <div class="col-md-9">
-
-        <input type="text"
-         required
-          name="date"
-           placeholder="MM/D/YYYY"
-           class="form-control"
-           bsDatepicker
-          [(ngModel)]="appointment.date"
-          [(bsValue)]="appointmentDateVal"
-
-           #dateModel="ngModel"
-           #dateEl
-           >
-
-            <abp-validation-summary
-              [control]="dateModel"
-              [controlEl]="dateEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-
-             <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="time">
-            {{ "Time" | localize }}
-          </label>
-          <div class="col-md-9">
-
-        <timepicker [(ngModel)]="appointmentTimeVal" name="time"
-         required #timeModel="ngModel" #timeEl
-        ></timepicker>
-
-            <abp-validation-summary
-              [control]="timeModel"
-              [controlEl]="timeEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-
-
-      </div>
-
-      
-        
   <abp-modal-footer
     [cancelDisabled]="saving"
     [saveDisabled]="!editAppointmentForm.form.valid || saving"

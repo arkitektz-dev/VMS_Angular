@@ -1,4 +1,120 @@
 ﻿<div [@routerTransition]>
+  <div class="">
+    <div style="margin-bottom: 50px; margin-top: 20px">
+      <span style="font-size: 30px; padding-bottom: 50px"
+        ><b>{{ "Login in to your account" | localize }}</b></span
+      >
+    </div>
+    <form
+      novalidate
+      autocomplete="off"
+      #loginForm="ngForm"
+      (ngSubmit)="login()"
+    >
+      <div *ngIf="this.loginOptionDto.loginNormal">
+        <div class="form-group">
+          <label class="form-label" for="username">Email Address</label>
+          <input
+            type="email"
+            class="form-control"
+            name="userNameOrEmailAddress"
+            [(ngModel)]="authService.authenticateModel.userNameOrEmailAddress"
+            [placeholder]="'UserNameOrEmail' | localize"
+            required
+            maxlength="256"
+            #userNameOrEmailAddressModel="ngModel"
+            #userNameOrEmailAddressEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="userNameOrEmailAddressModel"
+            [controlEl]="userNameOrEmailAddressEl"
+          ></abp-validation-summary>
+          <!-- <div class="invalid-feedback">
+          No, you missed this one.
+        </div>
+        <div class="help-block">Your unique email to app</div> -->
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="authService.authenticateModel.password"
+            [placeholder]="'Password' | localize"
+            required
+            maxlength="32"
+            #passwordModel="ngModel"
+            #passwordEl
+          />
+          <abp-validation-summary
+            class="invalid-feedback"
+            [control]="passwordModel"
+            [controlEl]="passwordEl"
+          ></abp-validation-summary>
+        </div>
+        <div class="form-group" style="margin-bottom: 60px">
+          <div class="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="rememberMe"
+              name="rememberMe"
+              [(ngModel)]="authService.rememberMe"
+            />
+            <label for="rememberMe" class="custom-control-label">
+              {{ "RememberMe" | localize }}
+            </label>
+          </div>
+        </div>
+
+        <!-- <div class="form-group" style="margin-bottom: 60px">
+          <span class="fw-700"
+            ><a href="#" class="text-primary fw-500" title="" target="_blank"
+              >Forgot Password?</a
+            ></span
+          >
+        </div> -->
+      </div>
+      <div class="row no-gutters align-items-center justify-content-center">
+        <div class="col-lg-12 pr-lg-1 my-2">
+          <button
+            *ngIf="this.loginOptionDto.loginNormal"
+            type="submit"
+            class="btn btn-info btn-block btn-lg"
+            [disabled]="!loginForm.form.valid || submitting"
+          >
+            {{ "LogIn" | localize }}
+          </button>
+
+          <button
+            *ngIf="this.isTenantSelected && this.loginOptionDto.loginOkta"
+            type="button"
+            class="btn btn-primary btn-block"
+            (click)="loginWithOcta()"
+          >
+            {{ "LogIn With Octa" | localize }}
+          </button>
+
+          <button
+            type="button"
+            *ngIf="
+              this.isTenantSelected && this.loginOptionDto.loginActiveDirectory
+            "
+            class="btn btn-primary btn-block"
+            (click)="loginWithAdfs()"
+          >
+            {{ "LogIn With Adfs" | localize }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- <div [@routerTransition]>
   <h4 class="text-center mb-3">{{ "LogIn" | localize }}</h4>
   <form novalidate autocomplete="off" #loginForm="ngForm" (ngSubmit)="login()">
     <div *ngIf="this.loginOptionDto.loginNormal">
@@ -92,7 +208,9 @@
       <div class="col-md-12">
         <button
           type="button"
-          *ngIf="this.isTenantSelected && this.loginOptionDto.loginActiveDirectory"
+          *ngIf="
+            this.isTenantSelected && this.loginOptionDto.loginActiveDirectory
+          "
           class="btn btn-primary btn-block"
           (click)="loginWithAdfs()"
         >
@@ -106,4 +224,4 @@
       <i class="fa fa-plus-circle"></i> {{ "Register" | localize }}
     </a>
   </p>
-</div>
+</div> -->

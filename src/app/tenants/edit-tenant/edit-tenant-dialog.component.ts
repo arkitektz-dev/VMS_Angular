@@ -3,20 +3,21 @@ import {
   Injector,
   OnInit,
   Output,
-  EventEmitter
-} from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { AppComponentBase } from '@shared/app-component-base';
+  EventEmitter,
+} from "@angular/core";
+import { finalize } from "rxjs/operators";
+import { BsModalRef } from "ngx-bootstrap/modal";
+import { AppComponentBase } from "@shared/app-component-base";
 import {
   TenantServiceProxy,
-  TenantDto
-} from '@shared/service-proxies/service-proxies';
+  TenantDto,
+} from "@shared/service-proxies/service-proxies";
 
 @Component({
-  templateUrl: 'edit-tenant-dialog.component.html'
+  templateUrl: "edit-tenant-dialog.component.html",
 })
-export class EditTenantDialogComponent extends AppComponentBase
+export class EditTenantDialogComponent
+  extends AppComponentBase
   implements OnInit {
   saving = false;
   tenant: TenantDto = new TenantDto();
@@ -49,7 +50,7 @@ export class EditTenantDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
+        this.notify.success(this.l("SavedSuccessfully"));
         this.bsModalRef.hide();
         this.onSave.emit();
       });

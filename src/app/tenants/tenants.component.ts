@@ -95,16 +95,12 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
     let createOrEditTenantDialog: BsModalRef;
     if (!id) {
       createOrEditTenantDialog = this._modalService.show(
-        CreateTenantDialogComponent,
-        {
-          class: "modal-lg",
-        }
+        CreateTenantDialogComponent
       );
     } else {
       createOrEditTenantDialog = this._modalService.show(
         EditTenantDialogComponent,
         {
-          class: "modal-lg",
           initialState: {
             id: id,
           },

@@ -39,7 +39,13 @@
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/admin-lte-css-only/css/adminlte.min.css",
               "node_modules/@ng-select/ng-select/themes/material.theme.css",
-              "src/shared/core.less"
+              "src/shared/core.less",
+              "src/assets/css/vendors.bundle.css",
+              "src/assets/css/app.bundle.css",
+              "src/assets/css/theme-demo.css",
+              "src/assets/css/datagrid/datatables/datatables.bundle.css",
+              "src/assets/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css",
+              "src/assets/css/fa-solid.css"
             ],
             "scripts": [
               "node_modules/moment/min/moment.min.js",
@@ -50,7 +56,11 @@
               "node_modules/abp-web-resources/Abp/Framework/scripts/abp.js",
               "src/assets/abp-web-resources/abp.sweet-alert.js",
               "src/assets/abp-web-resources/abp.freeze-ui.js",
-              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js"
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
+              "src/assets/js/vendors.bundle.js",
+              "src/assets/js/app.bundle.js",
+              "src/assets/js/datagrid/datatables/datatables.export.js",
+              "src/assets/js/datagrid/datatables/datatables.bundle.js"
             ]
           },
           "configurations": {
@@ -139,7 +149,10 @@
               "src/assets/freeze-ui/freeze-ui.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/admin-lte-css-only/css/adminlte.min.css",
-              "src/shared/core.less"
+              "src/shared/core.less",
+              "src/assets/css/vendors.bundle.css",
+              "src/assets/css/app.bundle.css",
+              "src/assets/css/theme-demo.css"
             ],
             "scripts": [
               "node_modules/moment/min/moment.min.js",
@@ -157,9 +170,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.json"
-            ],
+            "tsConfig": ["src/tsconfig.json"],
             "exclude": []
           }
         }
@@ -180,9 +191,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.json"
-            ],
+            "tsConfig": ["e2e/tsconfig.json"],
             "exclude": []
           }
         }

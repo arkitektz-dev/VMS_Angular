@@ -1,118 +1,275 @@
 <div [@routerTransition]>
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-6">
-          <h1>{{ "Assigned Sites" | localize }}</h1>
+  <div class="row">
+    <div class="col-lg-9">
+      <div id="panel-1" class="panel">
+        <div class="panel-hdr">
+          <h1>
+            {{ "Assigned Sites" | localize }}
+            <span class="fw-300"><i></i></span>
+          </h1>
         </div>
- 
       </div>
-    </div>
-  </section>
-  <section class="content px-2">
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-header">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <button
-                type="button"
-                class="btn bg-blue"
-                (click)="getDataPage(1)"
-              >
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-            <input
-              type="text"
-              class="form-control"
-              name="keyword"
-              [placeholder]="'SearchWithThreeDot' | localize"
-              [(ngModel)]="keyword"
-              (keyup.enter)="getDataPage(1)"
-            />
-          </div>
-        </div>
-        <div class="card-body table-responsive p-0">
-          <table class="table table-hover text-nowrap" [busy]="isTableLoading">
-            <thead class="bg-light">
-              <tr>
-                <th>{{ "User Name" | localize }}</th>
-                <th>{{ "Name" | localize }}</th>
-                <th>{{ "Sites" | localize }}</th>
-                <th>{{ "Default Site" | localize }}</th>
-
-                <th style="width: 200px;">{{ "Actions" | localize }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="
-                  let site of assignedSites
-                    | paginate
-                      : {
-                          id: 'server',
-                          itemsPerPage: pageSize,
-                          currentPage: pageNumber,
-                          totalItems: totalItems
-                        }
-                "
-              >
-                <td>{{ site.userName }}</td>
-                <td>{{ site.name }}</td>
-                <td>
-                  <span *ngFor="let siteName of site.assignedSitesName" class="badge badge-info mr-2">
-                    {{siteName}}
-                  </span>
-                </td>
-                <td>
-                  <select class="form-control" *ngIf="site.sites.length > 0" (change)="onChangeDefaultSite($event)">
-                    <option *ngFor="let assignSite of site.sites" [value]="assignSite.id" [selected]="assignSite.isDefault==true">
-                      {{assignSite.siteName}}
-                    </option>
-                  </select>
-                </td>
-
-                <td>
-                  <button
-                    type="button"
-                    class="btn btn-sm bg-secondary"
-                   (click)="editAssignedSite(site)" 
-                  >
-                    <i class="fas fa-pencil-alt"></i>
-                  
-                    {{ "Edit" | localize }}
-                  </button>
-                
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card-footer bg-light border-top">
-          <div class="row">
-            <div class="col-sm-4 col-12 text-sm-left text-center">
-              <button class="btn btn-secondary" (click)="refresh()">
-                <i class="fas fa-redo-alt"></i>
-              </button>
-            </div>
-            <div class="col-sm-4 col-12 text-center">
-              <p class="mb-0 my-2">
-                {{ "TotalRecordsCount" | localize: totalItems }}
-              </p>
-            </div>
-            <div class="col-sm-4 col-12">
-              <div class="float-sm-right m-auto">
-                <abp-pagination-controls
-                  id="server"
-                  (pageChange)="getDataPage($event)"
+      <div id="panel-2" class="panel">
+        <div class="panel-container show">
+          <div class="panel-content">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <button
+                  type="button"
+                  class="btn bg-blue"
+                  (click)="getDataPage(1)"
                 >
-                </abp-pagination-controls>
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <input
+                type="text"
+                class="form-control"
+                name="keyword"
+                [placeholder]="'SearchWithThreeDot' | localize"
+                [(ngModel)]="keyword"
+                (keyup.enter)="getDataPage(1)"
+              />
+            </div>
+            <table
+              id="dt-basic-example"
+              class="table table-bordered table-hover table-striped w-100"
+              [busy]="isTableLoading"
+            >
+              <colgroup>
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 15%" />
+                <col span="1" style="width: 20%" />
+                <col span="1" style="width: 20%" />
+                <col span="1" style="width: 20%" />
+              </colgroup>
+              <thead class="" style="text-align: center">
+                <tr>
+                  <th>{{ "User Name" | localize }}</th>
+                  <th>{{ "Name" | localize }}</th>
+                  <th>{{ "Sites" | localize }}</th>
+                  <th>{{ "Default Site" | localize }}</th>
+                  <th>{{ "Actions" | localize }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let site of assignedSites
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }
+                  "
+                >
+                  <td>
+                    <center>{{ site.userName }}</center>
+                  </td>
+                  <td>
+                    <center>{{ site.name }}</center>
+                  </td>
+                  <td>
+                    <center>
+                      <span
+                        *ngFor="let siteName of site.assignedSitesName"
+                        class="badge badge-info mr-2"
+                      >
+                        {{ siteName }}
+                      </span>
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      <select
+                        class="form-control"
+                        *ngIf="site.sites.length > 0"
+                        (change)="onChangeDefaultSite($event)"
+                      >
+                        <option
+                          *ngFor="let assignSite of site.sites"
+                          [value]="assignSite.id"
+                          [selected]="assignSite.isDefault == true"
+                        >
+                          {{ assignSite.siteName }}
+                        </option>
+                      </select>
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      <a
+                        href="javascript:void(0);"
+                        data-toggle="tooltip"
+                        title="Edit"
+                        class="btn btn-sm btn-info btn-icon waves-effect waves-themed"
+                        style="margin-right: 5px"
+                        (click)="editAssignedSite(site)"
+                      >
+                        <i class="fas fa-pencil"></i
+                      ></a>
+                    </center>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-sm-4 col-12 text-sm-left text-center">
+                <button class="btn btn-secondary" (click)="refresh()">
+                  <i class="fas fa-redo-alt"></i>
+                </button>
+              </div>
+              <div class="col-sm-4 col-12 text-center">
+                <p class="mb-0 my-2">
+                  {{ "TotalRecordsCount" | localize: totalItems }}
+                </p>
+              </div>
+              <div class="col-sm-4 col-12">
+                <div class="float-sm-right m-auto">
+                  <abp-pagination-controls
+                    id="server"
+                    (pageChange)="getDataPage($event)"
+                  >
+                  </abp-pagination-controls>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <div class="col-lg-3">
+      <div class="fs-lg fw-300 p-2 bg-white border-faded rounded mb-g">
+        <h3 class="mb-g">{{ "Assigned Sites" | localize }}</h3>
+        <p>
+          This option displays the list of users with access rights for this
+          application.
+        </p>
+        <p>
+          The privileged user can assign the user access roles, update the
+          user's password, edit the details and delete the user from accessing
+          this system.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- <section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h1>{{ "Assigned Sites" | localize }}</h1>
+      </div>
+
+    </div>
+  </div>
+</section>
+<section class="content px-2">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <button
+              type="button"
+              class="btn bg-blue"
+              (click)="getDataPage(1)"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <input
+            type="text"
+            class="form-control"
+            name="keyword"
+            [placeholder]="'SearchWithThreeDot' | localize"
+            [(ngModel)]="keyword"
+            (keyup.enter)="getDataPage(1)"
+          />
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap" [busy]="isTableLoading">
+          <thead class="bg-light">
+            <tr>
+              <th>{{ "User Name" | localize }}</th>
+              <th>{{ "Name" | localize }}</th>
+              <th>{{ "Sites" | localize }}</th>
+              <th>{{ "Default Site" | localize }}</th>
+
+              <th style="width: 200px;">{{ "Actions" | localize }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let site of assignedSites
+                  | paginate
+                    : {
+                        id: 'server',
+                        itemsPerPage: pageSize,
+                        currentPage: pageNumber,
+                        totalItems: totalItems
+                      }
+              "
+            >
+              <td>{{ site.userName }}</td>
+              <td>{{ site.name }}</td>
+              <td>
+                <span *ngFor="let siteName of site.assignedSitesName" class="badge badge-info mr-2">
+                  {{siteName}}
+                </span>
+              </td>
+              <td>
+                <select class="form-control" *ngIf="site.sites.length > 0" (change)="onChangeDefaultSite($event)">
+                  <option *ngFor="let assignSite of site.sites" [value]="assignSite.id" [selected]="assignSite.isDefault==true">
+                    {{assignSite.siteName}}
+                  </option>
+                </select>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm bg-secondary"
+                 (click)="editAssignedSite(site)" 
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                
+                  {{ "Edit" | localize }}
+                </button>
+              
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer bg-light border-top">
+        <div class="row">
+          <div class="col-sm-4 col-12 text-sm-left text-center">
+            <button class="btn btn-secondary" (click)="refresh()">
+              <i class="fas fa-redo-alt"></i>
+            </button>
+          </div>
+          <div class="col-sm-4 col-12 text-center">
+            <p class="mb-0 my-2">
+              {{ "TotalRecordsCount" | localize: totalItems }}
+            </p>
+          </div>
+          <div class="col-sm-4 col-12">
+            <div class="float-sm-right m-auto">
+              <abp-pagination-controls
+                id="server"
+                (pageChange)="getDataPage($event)"
+              >
+              </abp-pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
