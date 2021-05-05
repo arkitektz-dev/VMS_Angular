@@ -12,39 +12,46 @@
     <div class="container-fluid">
       <div class="card">
         <div class="card-body">
-          <form
-            class="form-horizontal"
-            autocomplete="off"
-            #createSiteForm="ngForm"
-            (ngSubmit)="requestSetup()"
-            *ngIf="requestShow$ | async"
-          >
-            <button class="btn bg-blue">
-              <i class="fas fa-download"></i>
+          <div *ngIf="checkPageAction('Request')">
+            <form
+              class="form-horizontal"
+              autocomplete="off"
+              #createSiteForm="ngForm"
+              (ngSubmit)="requestSetup()"
+              *ngIf="requestShow$ | async"
+            >
+              <button class="btn bg-blue">
+                <i class="fas fa-download"></i>
 
-              {{ "Request" | localize }}
-            </button>
-            
-            <p>Please click this button to request for the probe application.</p>
-          </form>
-          <form
-            class="form-horizontal"
-            autocomplete="off"
-            #createSiteForm="ngForm"
-            (ngSubmit)="downloadSetup()"
-            *ngIf="downloadShow$ | async"
-          >
-            <button class="btn bg-blue">
-              <i class="fas fa-download"></i>
+                {{ "Request" | localize }}
+              </button>
 
-              {{ "Download" | localize }}
-            </button>
-            <p>You can now download the application</p>
-          </form>
-          <p *ngIf="waitContainer$ | async">Your Request is submitted successfully. Your setup will be available shortly kindly refresh your page after sometime.</p>
+              <p>
+                Please click this button to request for the probe application.
+              </p>
+            </form>
+          </div>
+          <div *ngIf="checkPageAction('Download')">
+            <form
+              class="form-horizontal"
+              autocomplete="off"
+              #createSiteForm="ngForm"
+              (ngSubmit)="downloadSetup()"
+              *ngIf="downloadShow$ | async"
+            >
+              <button class="btn bg-blue">
+                <i class="fas fa-download"></i>
 
+                {{ "Download" | localize }}
+              </button>
+              <p>You can now download the application</p>
+            </form>
+          </div>
+          <p *ngIf="waitContainer$ | async">
+            Your Request is submitted successfully. Your setup will be available
+            shortly kindly refresh your page after sometime.
+          </p>
         </div>
- 
       </div>
     </div>
   </section>

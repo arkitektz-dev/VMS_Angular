@@ -10,6 +10,7 @@ import {
   TenantServiceProxy,
   TenantDto,
   TenantDtoPagedResultDto,
+  RoleServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { CreateTenantDialogComponent } from "./create-tenant/create-tenant-dialog.component";
 import { EditTenantDialogComponent } from "./edit-tenant/edit-tenant-dialog.component";
@@ -28,13 +29,34 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   keyword = "";
   isActive: boolean | null;
   advancedFiltersVisible = false;
+  pageActions = [];
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _tenantService: TenantServiceProxy,
     private _modalService: BsModalService
   ) {
     super(injector);
+  }
+
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.Tenants")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
   }
 
   list(
@@ -44,6 +66,7 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   ): void {
     request.keyword = this.keyword;
     request.isActive = this.isActive;
+    this.permissionActionRequest();
 
     this._tenantService
       .getAll(

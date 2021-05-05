@@ -86,6 +86,26 @@
                 </label>
               </div>
             </div>
+            <ng-container
+              *ngFor="let action of permission.actions; let j = index"
+            >
+              <div class="col-md-4 ml-2">
+                <div class="custom-control custom-checkbox mb-1">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    [id]="'action_' + i + '_' + j"
+                    (change)="onActionChange(action, permission.name, $event)"
+                  />
+                  <label
+                    class="custom-control-label"
+                    [for]="'action_' + i + '_' + j"
+                  >
+                    {{ action }}
+                  </label>
+                </div>
+              </div>
+            </ng-container>
           </ng-container>
         </div>
       </tab>

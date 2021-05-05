@@ -1,30 +1,31 @@
-import { Component, Injector } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { Component, Injector } from "@angular/core";
+import { finalize } from "rxjs/operators";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { appModuleAnimation } from "@shared/animations/routerTransition";
 import {
   PagedListingComponentBase,
-  PagedRequestDto
-} from '@shared/paged-listing-component-base';
+  PagedRequestDto,
+} from "@shared/paged-listing-component-base";
 import {
   RoleServiceProxy,
   RoleDto,
-  RoleDtoPagedResultDto
-} from '@shared/service-proxies/service-proxies';
-import { CreateRoleDialogComponent } from './create-role/create-role-dialog.component';
-import { EditRoleDialogComponent } from './edit-role/edit-role-dialog.component';
+  RoleDtoPagedResultDto,
+} from "@shared/service-proxies/service-proxies";
+import { CreateRoleDialogComponent } from "./create-role/create-role-dialog.component";
+import { EditRoleDialogComponent } from "./edit-role/edit-role-dialog.component";
 
 class PagedRolesRequestDto extends PagedRequestDto {
   keyword: string;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
-  animations: [appModuleAnimation()]
+  templateUrl: "./roles.component.html",
+  animations: [appModuleAnimation()],
 })
 export class RolesComponent extends PagedListingComponentBase<RoleDto> {
   roles: RoleDto[] = [];
-  keyword = '';
+  keyword = "";
+  pageActions = [];
 
   constructor(
     injector: Injector,
@@ -34,12 +35,32 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
     super(injector);
   }
 
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.Roles")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
+  }
+
   list(
     request: PagedRolesRequestDto,
     pageNumber: number,
     finishedCallback: Function
   ): void {
     request.keyword = this.keyword;
+    this.permissionActionRequest();
 
     this._rolesService
       .getAll(request.keyword, request.skipCount, request.maxResultCount)
@@ -50,13 +71,15 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
       )
       .subscribe((result: RoleDtoPagedResultDto) => {
         this.roles = result.items;
+        // console.log(this.roles);
+
         this.showPaging(result, pageNumber);
       });
   }
 
   delete(role: RoleDto): void {
     abp.message.confirm(
-      this.l('RoleDeleteWarningMessage', role.displayName),
+      this.l("RoleDeleteWarningMessage", role.displayName),
       undefined,
       (result: boolean) => {
         if (result) {
@@ -64,7 +87,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
             .delete(role.id)
             .pipe(
               finalize(() => {
-                abp.notify.success(this.l('SuccessfullyDeleted'));
+                abp.notify.success(this.l("SuccessfullyDeleted"));
                 this.refresh();
               })
             )
@@ -88,14 +111,14 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
       createOrEditRoleDialog = this._modalService.show(
         CreateRoleDialogComponent,
         {
-          class: 'modal-lg',
+          class: "modal-lg",
         }
       );
     } else {
       createOrEditRoleDialog = this._modalService.show(
         EditRoleDialogComponent,
         {
-          class: 'modal-lg',
+          class: "modal-lg",
           initialState: {
             id: id,
           },

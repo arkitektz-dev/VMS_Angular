@@ -10,6 +10,7 @@ import {
   SiteServiceProxy,
   SiteDto,
   SiteDtoPagedResultDto,
+  RoleServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { CreateSiteDialogComponent } from "./create-site/create-site-dialog.component";
 import { EditSiteDialogComponent } from "./edit-site/edit-site-dialog.component";
@@ -25,13 +26,34 @@ class PagedSitesRequestDto extends PagedRequestDto {
 export class SitesComponent extends PagedListingComponentBase<SiteDto> {
   sites: SiteDto[] = [];
   keyword = "";
+  pageActions = [];
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _sitesService: SiteServiceProxy,
     private _modalService: BsModalService
   ) {
     super(injector);
+  }
+
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.Sites")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
   }
 
   list(
@@ -40,6 +62,7 @@ export class SitesComponent extends PagedListingComponentBase<SiteDto> {
     finishedCallback: Function
   ): void {
     request.keyword = this.keyword;
+    this.permissionActionRequest();
 
     this._sitesService
       .getAll(request.keyword, request.skipCount, request.maxResultCount)

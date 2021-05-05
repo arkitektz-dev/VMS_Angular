@@ -11,6 +11,7 @@ import {
   UserServiceProxy,
   UserDto,
   UserDtoPagedResultDto,
+  RoleServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { CreateUserDialogComponent } from "./create-user/create-user-dialog.component";
 import { EditUserDialogComponent } from "./edit-user/edit-user-dialog.component";
@@ -31,9 +32,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   isActive: boolean | null;
   advancedFiltersVisible = false;
   pageTitle = null;
+  pageActions = [];
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _userService: UserServiceProxy,
     private _modalService: BsModalService,
     private _abpSessionService: AbpSessionService
@@ -44,6 +47,25 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     } else {
       this.pageTitle = "Users";
     }
+  }
+
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.Users")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
   }
 
   createUser(): void {
@@ -71,6 +93,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   ): void {
     request.keyword = this.keyword;
     request.isActive = this.isActive;
+    this.permissionActionRequest();
 
     this._userService
       .getAll(

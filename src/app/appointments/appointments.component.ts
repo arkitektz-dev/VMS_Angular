@@ -1,5 +1,8 @@
 import { DetailAppointmentComponent } from "./detail-appointment/detail-appointment.component";
-import { AppointmentStatusServiceProxy } from "./../../shared/service-proxies/service-proxies";
+import {
+  AppointmentStatusServiceProxy,
+  RoleServiceProxy,
+} from "./../../shared/service-proxies/service-proxies";
 import { Component, Injector, OnInit } from "@angular/core";
 import { finalize } from "rxjs/operators";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
@@ -36,6 +39,7 @@ export class AppointmentsComponent extends PagedListingComponentBase<Appointment
   saving = false;
   fromDate = undefined;
   toDate = undefined;
+  pageActions = [];
 
   minToDate = new Date();
 
@@ -50,6 +54,7 @@ export class AppointmentsComponent extends PagedListingComponentBase<Appointment
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _appointmentService: AppointmentServiceProxy,
     private _modalService: BsModalService,
     private _eventEmitterService: EventEmitterService,
@@ -61,6 +66,25 @@ export class AppointmentsComponent extends PagedListingComponentBase<Appointment
     });
   }
 
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.Appointments")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
+  }
+
   protected list(
     request: PagedAppointmentRequestDto,
     pageNumber: number,
@@ -69,6 +93,9 @@ export class AppointmentsComponent extends PagedListingComponentBase<Appointment
     request.keyword = this.keyword;
     request.fromDate = this.fromDate;
     request.toDate = this.toDate;
+
+    this.permissionActionRequest();
+
     this._appointmentService
       .getAll(
         request.keyword,

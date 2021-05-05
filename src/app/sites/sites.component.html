@@ -12,6 +12,7 @@
             <div class="frame-wrap">
               <div class="demo">
                 <button
+                  *ngIf="checkPageAction('Create')"
                   type="button"
                   class="btn btn-sm btn-info"
                   style="width: 100px"
@@ -90,6 +91,7 @@
                   <td>
                     <center>
                       <a
+                        *ngIf="checkPageAction('Modify')"
                         href="javascript:void(0);"
                         data-toggle="tooltip"
                         title="Edit"
@@ -100,6 +102,7 @@
                         <i class="fas fa-pencil"></i
                       ></a>
                       <a
+                        *ngIf="checkPageAction('Delete')"
                         href="javascript:void(0);"
                         data-toggle="tooltip"
                         title="Delete"
@@ -108,16 +111,6 @@
                         (click)="delete(site)"
                       >
                         <i class="fas fa-times"></i
-                      ></a>
-                      <a
-                        href="javascript:void(0);"
-                        data-toggle="tooltip"
-                        title="ResetPassword"
-                        class="btn btn-sm btn-danger btn-icon waves-effect waves-themed"
-                        style="margin-right: 5px"
-                        (click)="resetPassword(user)"
-                      >
-                        <i class="fas fa-lock"></i
                       ></a>
                     </center>
                   </td>

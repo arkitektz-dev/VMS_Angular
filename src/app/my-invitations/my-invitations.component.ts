@@ -3,6 +3,7 @@ import {
   MyInvitationDto,
   MyInvitationDtoPagedResultDto,
   MyInvitationServiceProxy,
+  RoleServiceProxy,
 } from "./../../shared/service-proxies/service-proxies";
 import { Component, Injector, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
@@ -46,9 +47,11 @@ export class MyInvitationsComponent extends PagedListingComponentBase<MyInvitati
     // { id: "Scheduled", name: "Scheduled" },
     // { id: "Cancelled", name: "Cancelled" },
   ];
+  pageActions = [];
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _myInvitationService: MyInvitationServiceProxy,
     private _modalService: BsModalService,
     private _eventEmitterService: EventEmitterService,
@@ -62,6 +65,25 @@ export class MyInvitationsComponent extends PagedListingComponentBase<MyInvitati
     });
   }
 
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.MyInvitations")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
+  }
+
   protected list(
     request: PagedMyInvitationRequestDto,
     pageNumber: number,
@@ -70,6 +92,7 @@ export class MyInvitationsComponent extends PagedListingComponentBase<MyInvitati
     request.keyword = this.keyword;
     request.fromDate = this.fromDate;
     request.toDate = this.toDate;
+    this.permissionActionRequest();
 
     this._myInvitationService
       .getAll(

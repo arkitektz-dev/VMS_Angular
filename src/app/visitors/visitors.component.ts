@@ -10,6 +10,7 @@ import {
   VisitorServiceProxy,
   VisitorDto,
   VisitorDtoPagedResultDto,
+  RoleServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { CreateVisitorDialogComponent } from "./create-visitor/create-visitor-dialog.component";
 import { EditVisitorDialogComponent } from "./edit-visitor/edit-visitor-dialog.component";
@@ -27,14 +28,36 @@ export class VisitorsComponent extends PagedListingComponentBase<VisitorDto> {
   keyword = "";
   sites = [];
   saving = false;
+  pageActions = [];
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _visitorsService: VisitorServiceProxy,
     private _modalService: BsModalService
   ) {
     super(injector);
     this.getAllSites();
+  }
+
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.Visitors")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        console.log(result);
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
   }
 
   list(
@@ -43,6 +66,7 @@ export class VisitorsComponent extends PagedListingComponentBase<VisitorDto> {
     finishedCallback: Function
   ): void {
     request.keyword = this.keyword;
+    this.permissionActionRequest();
 
     this._visitorsService
       .getAll(request.keyword, request.skipCount, request.maxResultCount)

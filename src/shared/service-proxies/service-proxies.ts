@@ -2981,6 +2981,64 @@ export class RoleServiceProxy {
     }
 
     /**
+     * @param pageName (optional) 
+     * @return Success
+     */
+    getPermissionActionsByPage(pageName: string | null | undefined): Observable<string[]> {
+        let url_ = this.baseUrl + "/api/services/app/Role/GetPermissionActionsByPage?";
+        if (pageName !== undefined && pageName !== null)
+            url_ += "pageName=" + encodeURIComponent("" + pageName) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPermissionActionsByPage(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPermissionActionsByPage(<any>response_);
+                } catch (e) {
+                    return <Observable<string[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPermissionActionsByPage(response: HttpResponseBase): Observable<string[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string[]>(<any>null);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -7826,12 +7884,68 @@ export interface IMyInvitationQrcodeDataDto {
     id: number;
 }
 
+export class PermissionActionDto implements IPermissionActionDto {
+    permissionName: string | undefined;
+    actions: string[] | undefined;
+
+    constructor(data?: IPermissionActionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.permissionName = _data["permissionName"];
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): PermissionActionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PermissionActionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["permissionName"] = this.permissionName;
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item);
+        }
+        return data; 
+    }
+
+    clone(): PermissionActionDto {
+        const json = this.toJSON();
+        let result = new PermissionActionDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPermissionActionDto {
+    permissionName: string | undefined;
+    actions: string[] | undefined;
+}
+
 export class CreateRoleDto implements ICreateRoleDto {
     name: string;
     displayName: string;
     normalizedName: string | undefined;
     description: string | undefined;
     grantedPermissions: string[] | undefined;
+    actions: PermissionActionDto[] | undefined;
 
     constructor(data?: ICreateRoleDto) {
         if (data) {
@@ -7852,6 +7966,11 @@ export class CreateRoleDto implements ICreateRoleDto {
                 this.grantedPermissions = [] as any;
                 for (let item of _data["grantedPermissions"])
                     this.grantedPermissions.push(item);
+            }
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions.push(PermissionActionDto.fromJS(item));
             }
         }
     }
@@ -7874,6 +7993,11 @@ export class CreateRoleDto implements ICreateRoleDto {
             for (let item of this.grantedPermissions)
                 data["grantedPermissions"].push(item);
         }
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item.toJSON());
+        }
         return data; 
     }
 
@@ -7891,6 +8015,7 @@ export interface ICreateRoleDto {
     normalizedName: string | undefined;
     description: string | undefined;
     grantedPermissions: string[] | undefined;
+    actions: PermissionActionDto[] | undefined;
 }
 
 export class RoleDto implements IRoleDto {
@@ -7899,6 +8024,7 @@ export class RoleDto implements IRoleDto {
     normalizedName: string | undefined;
     description: string | undefined;
     grantedPermissions: string[] | undefined;
+    actions: PermissionActionDto[] | undefined;
     id: number;
 
     constructor(data?: IRoleDto) {
@@ -7920,6 +8046,11 @@ export class RoleDto implements IRoleDto {
                 this.grantedPermissions = [] as any;
                 for (let item of _data["grantedPermissions"])
                     this.grantedPermissions.push(item);
+            }
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions.push(PermissionActionDto.fromJS(item));
             }
             this.id = _data["id"];
         }
@@ -7943,6 +8074,11 @@ export class RoleDto implements IRoleDto {
             for (let item of this.grantedPermissions)
                 data["grantedPermissions"].push(item);
         }
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item.toJSON());
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -7961,6 +8097,7 @@ export interface IRoleDto {
     normalizedName: string | undefined;
     description: string | undefined;
     grantedPermissions: string[] | undefined;
+    actions: PermissionActionDto[] | undefined;
     id: number;
 }
 
@@ -8082,6 +8219,8 @@ export class PermissionDto implements IPermissionDto {
     name: string | undefined;
     displayName: string | undefined;
     description: string | undefined;
+    grantedActions: string[] | undefined;
+    actions: string[] | undefined;
     id: number;
 
     constructor(data?: IPermissionDto) {
@@ -8098,6 +8237,16 @@ export class PermissionDto implements IPermissionDto {
             this.name = _data["name"];
             this.displayName = _data["displayName"];
             this.description = _data["description"];
+            if (Array.isArray(_data["grantedActions"])) {
+                this.grantedActions = [] as any;
+                for (let item of _data["grantedActions"])
+                    this.grantedActions.push(item);
+            }
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions.push(item);
+            }
             this.id = _data["id"];
         }
     }
@@ -8114,6 +8263,16 @@ export class PermissionDto implements IPermissionDto {
         data["name"] = this.name;
         data["displayName"] = this.displayName;
         data["description"] = this.description;
+        if (Array.isArray(this.grantedActions)) {
+            data["grantedActions"] = [];
+            for (let item of this.grantedActions)
+                data["grantedActions"].push(item);
+        }
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item);
+        }
         data["id"] = this.id;
         return data; 
     }
@@ -8130,6 +8289,8 @@ export interface IPermissionDto {
     name: string | undefined;
     displayName: string | undefined;
     description: string | undefined;
+    grantedActions: string[] | undefined;
+    actions: string[] | undefined;
     id: number;
 }
 

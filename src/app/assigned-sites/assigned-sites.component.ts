@@ -10,6 +10,7 @@ import {
   AssignedSitesServiceProxy,
   AssignedSitesDto,
   AssignedSitesDtoPagedResultDto,
+  RoleServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 import { EditAssignedSiteDialogComponent } from "./edit-assigned-site/edit-assigned-site.component";
 
@@ -26,12 +27,34 @@ export class AssignedSitesComponent extends PagedListingComponentBase<AssignedSi
   assignedSites: AssignedSitesDto[] = [];
   keyword = "";
   saving = false;
+  pageActions = [];
+
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _assignedSitesService: AssignedSitesServiceProxy,
     private _modalService: BsModalService
   ) {
     super(injector);
+  }
+
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.AssignedSites")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
   }
 
   protected list(
@@ -40,6 +63,7 @@ export class AssignedSitesComponent extends PagedListingComponentBase<AssignedSi
     finishedCallback: Function
   ): void {
     request.keyword = this.keyword;
+    this.permissionActionRequest();
 
     this._assignedSitesService
       .getAll(request.keyword, request.skipCount, request.maxResultCount)

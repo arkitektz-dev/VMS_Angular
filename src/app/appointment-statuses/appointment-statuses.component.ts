@@ -12,6 +12,7 @@ import {
   AppointmentStatusServiceProxy,
   AppointmentStatusesDto,
   AppointmentStatusesDtoPagedResultDto,
+  RoleServiceProxy,
 } from "@shared/service-proxies/service-proxies";
 
 import { EventEmitterService } from "@app/services/event-emitter.service";
@@ -30,14 +31,35 @@ export class AppointmentStatusesComponent extends PagedListingComponentBase<Appo
   appointmentStatus: AppointmentStatusesDto[] = [];
   keyword = "";
   saving = false;
+  pageActions = [];
 
   constructor(
     injector: Injector,
+    private _rolesService: RoleServiceProxy,
     private _appointmentStatusService: AppointmentStatusServiceProxy,
     private _modalService: BsModalService,
     private _eventEmitterService: EventEmitterService
   ) {
     super(injector);
+  }
+
+  permissionActionRequest() {
+    this._rolesService
+      .getPermissionActionsByPage("Pages.AppointmentStatus")
+      .pipe(
+        finalize(() => {
+          // finishedCallback();
+        })
+      )
+      .subscribe((result) => {
+        if (result.length > 0) {
+          this.pageActions = result;
+        }
+      });
+  }
+
+  checkPageAction(pageAction) {
+    return this.pageActions.includes(pageAction);
   }
 
   protected list(
@@ -46,6 +68,7 @@ export class AppointmentStatusesComponent extends PagedListingComponentBase<Appo
     finishedCallback: Function
   ): void {
     request.keyword = this.keyword;
+    this.permissionActionRequest();
 
     this._appointmentStatusService
       .getAll(request.keyword, request.skipCount, request.maxResultCount)

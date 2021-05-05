@@ -12,6 +12,7 @@
             <div class="frame-wrap">
               <div class="demo">
                 <button
+                  *ngIf="checkPageAction('Create')"
                   type="button"
                   class="btn btn-sm btn-info"
                   style="width: 100px"
@@ -81,6 +82,7 @@
                   </td>
                   <td>
                     <a
+                      *ngIf="checkPageAction('Modify')"
                       href="javascript:void(0);"
                       data-toggle="tooltip"
                       title="Edit"
@@ -91,6 +93,7 @@
                       <i class="fas fa-pencil"></i
                     ></a>
                     <a
+                      *ngIf="checkPageAction('Delete')"
                       href="javascript:void(0);"
                       data-toggle="tooltip"
                       title="Delete"

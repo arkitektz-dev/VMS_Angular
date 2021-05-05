@@ -12,6 +12,7 @@ import {
   RoleServiceProxy,
   RoleDto,
   PermissionDto,
+  PermissionActionDto,
   CreateRoleDto,
   PermissionDtoListResultDto,
 } from "@shared/service-proxies/service-proxies";
@@ -27,6 +28,7 @@ export class CreateRoleDialogComponent
   role = new RoleDto();
   permissions: PermissionDto[] = [];
   checkedPermissionsMap: { [key: string]: boolean } = {};
+  checkedActionsMap: any = [];
   defaultPermissionCheckedStatus = true;
 
   @Output() onSave = new EventEmitter<any>();
@@ -55,6 +57,12 @@ export class CreateRoleDialogComponent
         item.name
       );
     });
+    _map(this.permissions, (item) => {
+      this.checkedActionsMap.push({
+        permissionName: item.name,
+        actions: [],
+      });
+    });
   }
 
   isPermissionChecked(permissionName: string): boolean {
@@ -65,6 +73,35 @@ export class CreateRoleDialogComponent
 
   onPermissionChange(permission: PermissionDto, $event) {
     this.checkedPermissionsMap[permission.name] = $event.target.checked;
+    if (!$event.target.checked) {
+      const premissionAction = this.checkedActionsMap.find(
+        (a) => a.permissionName === permission.name
+      );
+      premissionAction.actions = [];
+    }
+  }
+
+  onActionChange(action, permissionName, $event) {
+    const permission = this.checkedActionsMap.find(
+      (a) => a.permissionName === permissionName
+    );
+    if (!permission) {
+      var obj = {
+        permissionName,
+        actions: [action],
+      };
+      this.checkedActionsMap.push(obj);
+    } else {
+      const index = permission.actions.indexOf(action);
+      if (index === -1) {
+        permission.actions.push(action);
+      } else {
+        permission.actions.splice(index, 1);
+      }
+    }
+    console.log(this.getCheckedPermissions());
+
+    console.log(this.checkedActionsMap);
   }
 
   getCheckedPermissions(): string[] {
@@ -83,6 +120,13 @@ export class CreateRoleDialogComponent
     const role = new CreateRoleDto();
     role.init(this.role);
     role.grantedPermissions = this.getCheckedPermissions();
+    role.actions = this.checkedActionsMap.map((c) => {
+      var permissionDto = new PermissionActionDto();
+      permissionDto.permissionName = c.permissionName;
+      permissionDto.actions = c.actions;
+      return permissionDto;
+    });
+    console.log(role);
 
     this._roleService
       .create(role)
