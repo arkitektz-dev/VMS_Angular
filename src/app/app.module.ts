@@ -84,6 +84,7 @@ import { MyInvitationQrcodeDataComponent } from "./my-invitation-qrcode-data/my-
 
 import { DownloadSetupComponent } from "./download-setup/download-setup.component";
 import { LoginOptionComponent } from "./login-option/login-option.component";
+import { ChartsModule } from "ng2-charts";
 
 @NgModule({
   declarations: [
@@ -159,6 +160,7 @@ import { LoginOptionComponent } from "./login-option/login-option.component";
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    ChartsModule,
     HttpClientJsonpModule,
     ModalModule.forChild(),
     BsDropdownModule,

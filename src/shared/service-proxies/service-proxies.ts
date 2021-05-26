@@ -1993,6 +1993,120 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
+export class DashboardServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAdminStatistics(): Observable<AdminStatisticsDto> {
+        let url_ = this.baseUrl + "/api/services/app/Dashboard/GetAdminStatistics";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAdminStatistics(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAdminStatistics(<any>response_);
+                } catch (e) {
+                    return <Observable<AdminStatisticsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AdminStatisticsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAdminStatistics(response: HttpResponseBase): Observable<AdminStatisticsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AdminStatisticsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AdminStatisticsDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getTenantStatistics(): Observable<TenantStatisticsDto> {
+        let url_ = this.baseUrl + "/api/services/app/Dashboard/GetTenantStatistics";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTenantStatistics(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTenantStatistics(<any>response_);
+                } catch (e) {
+                    return <Observable<TenantStatisticsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TenantStatisticsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetTenantStatistics(response: HttpResponseBase): Observable<TenantStatisticsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TenantStatisticsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TenantStatisticsDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class EmailServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -7266,6 +7380,293 @@ export class ChangeUiThemeInput implements IChangeUiThemeInput {
 
 export interface IChangeUiThemeInput {
     theme: string;
+}
+
+export class ChartDataDto implements IChartDataDto {
+    monthLabel: string | undefined;
+    yearLabel: string | undefined;
+    tenantCount: number;
+
+    constructor(data?: IChartDataDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.monthLabel = _data["monthLabel"];
+            this.yearLabel = _data["yearLabel"];
+            this.tenantCount = _data["tenantCount"];
+        }
+    }
+
+    static fromJS(data: any): ChartDataDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChartDataDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["monthLabel"] = this.monthLabel;
+        data["yearLabel"] = this.yearLabel;
+        data["tenantCount"] = this.tenantCount;
+        return data; 
+    }
+
+    clone(): ChartDataDto {
+        const json = this.toJSON();
+        let result = new ChartDataDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IChartDataDto {
+    monthLabel: string | undefined;
+    yearLabel: string | undefined;
+    tenantCount: number;
+}
+
+export class RecentTenantDto implements IRecentTenantDto {
+    registeredDate: string | undefined;
+    tenantName: string | undefined;
+
+    constructor(data?: IRecentTenantDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.registeredDate = _data["registeredDate"];
+            this.tenantName = _data["tenantName"];
+        }
+    }
+
+    static fromJS(data: any): RecentTenantDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RecentTenantDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["registeredDate"] = this.registeredDate;
+        data["tenantName"] = this.tenantName;
+        return data; 
+    }
+
+    clone(): RecentTenantDto {
+        const json = this.toJSON();
+        let result = new RecentTenantDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRecentTenantDto {
+    registeredDate: string | undefined;
+    tenantName: string | undefined;
+}
+
+export class AdminStatisticsDto implements IAdminStatisticsDto {
+    totalTenants: number;
+    activeTenants: number;
+    inActiveTenants: number;
+    barChartData: ChartDataDto[] | undefined;
+    recentTenants: RecentTenantDto[] | undefined;
+
+    constructor(data?: IAdminStatisticsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalTenants = _data["totalTenants"];
+            this.activeTenants = _data["activeTenants"];
+            this.inActiveTenants = _data["inActiveTenants"];
+            if (Array.isArray(_data["barChartData"])) {
+                this.barChartData = [] as any;
+                for (let item of _data["barChartData"])
+                    this.barChartData.push(ChartDataDto.fromJS(item));
+            }
+            if (Array.isArray(_data["recentTenants"])) {
+                this.recentTenants = [] as any;
+                for (let item of _data["recentTenants"])
+                    this.recentTenants.push(RecentTenantDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): AdminStatisticsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AdminStatisticsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalTenants"] = this.totalTenants;
+        data["activeTenants"] = this.activeTenants;
+        data["inActiveTenants"] = this.inActiveTenants;
+        if (Array.isArray(this.barChartData)) {
+            data["barChartData"] = [];
+            for (let item of this.barChartData)
+                data["barChartData"].push(item.toJSON());
+        }
+        if (Array.isArray(this.recentTenants)) {
+            data["recentTenants"] = [];
+            for (let item of this.recentTenants)
+                data["recentTenants"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): AdminStatisticsDto {
+        const json = this.toJSON();
+        let result = new AdminStatisticsDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IAdminStatisticsDto {
+    totalTenants: number;
+    activeTenants: number;
+    inActiveTenants: number;
+    barChartData: ChartDataDto[] | undefined;
+    recentTenants: RecentTenantDto[] | undefined;
+}
+
+export class TenantChartDataDto implements ITenantChartDataDto {
+    dateLabel: string | undefined;
+    monthLabel: string | undefined;
+    yearLabel: string | undefined;
+
+    constructor(data?: ITenantChartDataDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.dateLabel = _data["dateLabel"];
+            this.monthLabel = _data["monthLabel"];
+            this.yearLabel = _data["yearLabel"];
+        }
+    }
+
+    static fromJS(data: any): TenantChartDataDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantChartDataDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dateLabel"] = this.dateLabel;
+        data["monthLabel"] = this.monthLabel;
+        data["yearLabel"] = this.yearLabel;
+        return data; 
+    }
+
+    clone(): TenantChartDataDto {
+        const json = this.toJSON();
+        let result = new TenantChartDataDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITenantChartDataDto {
+    dateLabel: string | undefined;
+    monthLabel: string | undefined;
+    yearLabel: string | undefined;
+}
+
+export class TenantStatisticsDto implements ITenantStatisticsDto {
+    totalSites: number;
+    totalAppointments: number;
+    totalVisitors: number;
+    barChartData: TenantChartDataDto[] | undefined;
+
+    constructor(data?: ITenantStatisticsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalSites = _data["totalSites"];
+            this.totalAppointments = _data["totalAppointments"];
+            this.totalVisitors = _data["totalVisitors"];
+            if (Array.isArray(_data["barChartData"])) {
+                this.barChartData = [] as any;
+                for (let item of _data["barChartData"])
+                    this.barChartData.push(TenantChartDataDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TenantStatisticsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantStatisticsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalSites"] = this.totalSites;
+        data["totalAppointments"] = this.totalAppointments;
+        data["totalVisitors"] = this.totalVisitors;
+        if (Array.isArray(this.barChartData)) {
+            data["barChartData"] = [];
+            for (let item of this.barChartData)
+                data["barChartData"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): TenantStatisticsDto {
+        const json = this.toJSON();
+        let result = new TenantStatisticsDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITenantStatisticsDto {
+    totalSites: number;
+    totalAppointments: number;
+    totalVisitors: number;
+    barChartData: TenantChartDataDto[] | undefined;
 }
 
 export class EmailConfig implements IEmailConfig {
