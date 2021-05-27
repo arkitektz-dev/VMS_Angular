@@ -9,12 +9,12 @@
     </div>
   </section>
   <section class="content px-2">
-    <div class="container-fluid">
+    <div *ngIf="!this._abpSessionService.tenantId" class="container-fluid">
       <div class="row">
         <div class="col-lg-3 col-6">
           <div class="small-box bg-success">
             <div class="inner">
-              <h3>{{totalTenants$ | async}}</h3>
+              <h3>{{ totalTenants$ | async }}</h3>
               <p>Total Clients</p>
             </div>
             <div class="icon">
@@ -29,7 +29,7 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-info">
             <div class="inner">
-              <h3>{{activeTenants$ | async}}</h3>
+              <h3>{{ activeTenants$ | async }}</h3>
               <p>Active Clients</p>
             </div>
             <div class="icon">
@@ -74,32 +74,148 @@
       </div>
       <div class="row mt-4">
         <div class="col-lg-6 col-12 mb-3">
-          <canvas baseChart 
-          [datasets]="barChartData"
-           [labels]="barChartLabels" 
-           [options]="barChartOptions"
-            [legend]="barChartLegend" 
-            [chartType]="barChartType">
+          <h3>Monthly Registrations</h3>
+          <canvas
+            baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+          >
           </canvas>
         </div>
         <div class="col-lg-6 col-12 mb-3">
+          <h3>Recent Tenant Registrations</h3>
           <table class="table table-bordered w-100">
             <thead>
-              <tr >
+              <tr>
                 <th>Sr#</th>
-                <th>Registered Date</th>
                 <th>Client</th>
+                <th>Registered Date</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let tenant of recentTenants; let i = index">
                 <td>
-                  {{i+1}}
+                  {{ i + 1 }}
                 </td>
                 <td>
-                  {{tenant.tenantName}}
+                  {{ tenant.tenantName }}
                 </td>
-                <td>{{tenant.registeredDate}}</td>
+                <td>{{ tenant.registeredDate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="this._abpSessionService.tenantId" class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h3>Today Appointments</h3>
+          <div class="row">
+            <div class="col-6">
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>{{ todayTotalAppointments$ | async }}</h3>
+                  <p>Total</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <!-- <a href="" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a> -->
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3>{{ todayCompletedAppointments$ | async }}</h3>
+                  <p>Completed</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <!-- <a href="" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <h3>Last Week Appointments</h3>
+          <div class="row">
+            <div class="col-6">
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>{{ lastWeekTotalAppointments$ | async }}</h3>
+                  <p>Total</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <!-- <a href="" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a> -->
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3>{{ lastWeekCompletedAppointments$ | async }}</h3>
+                  <p>Completed</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <!-- <a href="" class="small-box-footer">
+                  More info
+                  <i class="fas fa-arrow-circle-right"></i>
+                </a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-lg-6 col-12 mb-3">
+          <h3>Day Wise Appointments</h3>
+          <canvas
+            baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+          >
+          </canvas>
+        </div>
+        <div class="col-lg-6 col-12 mb-3">
+          <h3>Employee Leader Board</h3>
+          <table class="table table-bordered w-100">
+            <thead>
+              <tr>
+                <th>Sr#</th>
+                <th>Employee</th>
+                <th>Appointments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let employee of employeeAppointments; let i = index">
+                <td>
+                  {{ i + 1 }}
+                </td>
+                <td>
+                  {{ employee.employeeName }}
+                </td>
+                <td>{{ employee.totalAppointments }}</td>
               </tr>
             </tbody>
           </table>
@@ -107,7 +223,4 @@
       </div>
     </div>
   </section>
-
-
-
 </div>

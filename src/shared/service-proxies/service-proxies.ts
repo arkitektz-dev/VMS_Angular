@@ -7559,6 +7559,8 @@ export class TenantChartDataDto implements ITenantChartDataDto {
     dateLabel: string | undefined;
     monthLabel: string | undefined;
     yearLabel: string | undefined;
+    totalAppointments: number;
+    completedAppointments: number;
 
     constructor(data?: ITenantChartDataDto) {
         if (data) {
@@ -7574,6 +7576,8 @@ export class TenantChartDataDto implements ITenantChartDataDto {
             this.dateLabel = _data["dateLabel"];
             this.monthLabel = _data["monthLabel"];
             this.yearLabel = _data["yearLabel"];
+            this.totalAppointments = _data["totalAppointments"];
+            this.completedAppointments = _data["completedAppointments"];
         }
     }
 
@@ -7589,6 +7593,8 @@ export class TenantChartDataDto implements ITenantChartDataDto {
         data["dateLabel"] = this.dateLabel;
         data["monthLabel"] = this.monthLabel;
         data["yearLabel"] = this.yearLabel;
+        data["totalAppointments"] = this.totalAppointments;
+        data["completedAppointments"] = this.completedAppointments;
         return data; 
     }
 
@@ -7604,13 +7610,71 @@ export interface ITenantChartDataDto {
     dateLabel: string | undefined;
     monthLabel: string | undefined;
     yearLabel: string | undefined;
+    totalAppointments: number;
+    completedAppointments: number;
+}
+
+export class EmployeeAppointmentDto implements IEmployeeAppointmentDto {
+    employeeName: string | undefined;
+    totalAppointments: number;
+    completedAppointments: number;
+
+    constructor(data?: IEmployeeAppointmentDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.employeeName = _data["employeeName"];
+            this.totalAppointments = _data["totalAppointments"];
+            this.completedAppointments = _data["completedAppointments"];
+        }
+    }
+
+    static fromJS(data: any): EmployeeAppointmentDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EmployeeAppointmentDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["employeeName"] = this.employeeName;
+        data["totalAppointments"] = this.totalAppointments;
+        data["completedAppointments"] = this.completedAppointments;
+        return data; 
+    }
+
+    clone(): EmployeeAppointmentDto {
+        const json = this.toJSON();
+        let result = new EmployeeAppointmentDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IEmployeeAppointmentDto {
+    employeeName: string | undefined;
+    totalAppointments: number;
+    completedAppointments: number;
 }
 
 export class TenantStatisticsDto implements ITenantStatisticsDto {
     totalSites: number;
     totalAppointments: number;
     totalVisitors: number;
+    todayTotalAppointments: number;
+    todayCompletedAppointments: number;
+    lastWeekTotalAppointments: number;
+    lastWeekCompletedAppointments: number;
     barChartData: TenantChartDataDto[] | undefined;
+    employeeAppointments: EmployeeAppointmentDto[] | undefined;
 
     constructor(data?: ITenantStatisticsDto) {
         if (data) {
@@ -7626,10 +7690,19 @@ export class TenantStatisticsDto implements ITenantStatisticsDto {
             this.totalSites = _data["totalSites"];
             this.totalAppointments = _data["totalAppointments"];
             this.totalVisitors = _data["totalVisitors"];
+            this.todayTotalAppointments = _data["todayTotalAppointments"];
+            this.todayCompletedAppointments = _data["todayCompletedAppointments"];
+            this.lastWeekTotalAppointments = _data["lastWeekTotalAppointments"];
+            this.lastWeekCompletedAppointments = _data["lastWeekCompletedAppointments"];
             if (Array.isArray(_data["barChartData"])) {
                 this.barChartData = [] as any;
                 for (let item of _data["barChartData"])
                     this.barChartData.push(TenantChartDataDto.fromJS(item));
+            }
+            if (Array.isArray(_data["employeeAppointments"])) {
+                this.employeeAppointments = [] as any;
+                for (let item of _data["employeeAppointments"])
+                    this.employeeAppointments.push(EmployeeAppointmentDto.fromJS(item));
             }
         }
     }
@@ -7646,10 +7719,19 @@ export class TenantStatisticsDto implements ITenantStatisticsDto {
         data["totalSites"] = this.totalSites;
         data["totalAppointments"] = this.totalAppointments;
         data["totalVisitors"] = this.totalVisitors;
+        data["todayTotalAppointments"] = this.todayTotalAppointments;
+        data["todayCompletedAppointments"] = this.todayCompletedAppointments;
+        data["lastWeekTotalAppointments"] = this.lastWeekTotalAppointments;
+        data["lastWeekCompletedAppointments"] = this.lastWeekCompletedAppointments;
         if (Array.isArray(this.barChartData)) {
             data["barChartData"] = [];
             for (let item of this.barChartData)
                 data["barChartData"].push(item.toJSON());
+        }
+        if (Array.isArray(this.employeeAppointments)) {
+            data["employeeAppointments"] = [];
+            for (let item of this.employeeAppointments)
+                data["employeeAppointments"].push(item.toJSON());
         }
         return data; 
     }
@@ -7666,7 +7748,12 @@ export interface ITenantStatisticsDto {
     totalSites: number;
     totalAppointments: number;
     totalVisitors: number;
+    todayTotalAppointments: number;
+    todayCompletedAppointments: number;
+    lastWeekTotalAppointments: number;
+    lastWeekCompletedAppointments: number;
     barChartData: TenantChartDataDto[] | undefined;
+    employeeAppointments: EmployeeAppointmentDto[] | undefined;
 }
 
 export class EmailConfig implements IEmailConfig {

@@ -1,8 +1,28 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Injector,
+  OnInit,
+} from "@angular/core";
+import { AppComponentBase } from "@shared/app-component-base";
 
 @Component({
-  selector: 'sidebar-logo',
-  templateUrl: './sidebar-logo.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "sidebar-logo",
+  templateUrl: "./sidebar-logo.component.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarLogoComponent {}
+export class SidebarLogoComponent extends AppComponentBase implements OnInit {
+  shownLoginName = "";
+  constructor(injector: Injector) {
+    super(injector);
+  }
+
+  ngOnInit() {
+    if (this.appSession.getShownLoginName().split("\\")[0].length == 1) {
+      this.shownLoginName = "VMS";
+    } else {
+      this.shownLoginName =
+        this.appSession.getShownLoginName().split("\\")[0] + " - VMS";
+    }
+  }
+}

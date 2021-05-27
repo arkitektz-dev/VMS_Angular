@@ -10,7 +10,13 @@
 <div class="page-logo">
   <a
     [routerLink]="['home']"
-    class="page-logo-link press-scale-down d-flex align-items-center position-relative"
+    class="
+      page-logo-link
+      press-scale-down
+      d-flex
+      align-items-center
+      position-relative
+    "
     data-toggle=""
     data-target=""
   >
@@ -23,6 +29,6 @@
         "
       ></span>
     </div>
-    <span class="page-logo-text mr-1">VMS</span>
+    <span class="page-logo-text mr-1">{{ shownLoginName }}</span>
   </a>
 </div>
