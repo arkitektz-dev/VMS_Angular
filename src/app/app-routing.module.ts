@@ -18,6 +18,7 @@ import { SitesComponent } from "./sites/sites.component";
 import { AppointmentsComponent } from "./appointments/appointments.component";
 import { DownloadSetupComponent } from "./download-setup/download-setup.component";
 import { LoginOptionComponent } from "./login-option/login-option.component";
+import { UploadLogoComponent } from "./upload-logo/upload-logo.component";
 
 @NgModule({
   imports: [
@@ -35,6 +36,12 @@ import { LoginOptionComponent } from "./login-option/login-option.component";
             path: "download",
             component: DownloadSetupComponent,
             data: { permission: "Pages.DownloadProbeApplication" },
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "upload-logo",
+            component: UploadLogoComponent,
+            data: { permission: "Pages.UploadLogo" },
             canActivate: [AppRouteGuard],
           },
           {

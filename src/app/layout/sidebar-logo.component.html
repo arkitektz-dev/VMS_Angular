@@ -23,10 +23,8 @@
     <div class="d-inline-block align-middle mr-1">
       <span
         class="profile-image profile-image-md rounded-circle d-block mt-1"
-        style="
-          background-image: url('assets/img/logo.png');
-          background-size: cover;
-        "
+        style="background-size: cover"
+        [ngStyle]="{ 'background-image': 'url(' + logo + ')' }"
       ></span>
     </div>
     <span class="page-logo-text mr-1">{{ shownLoginName }}</span>

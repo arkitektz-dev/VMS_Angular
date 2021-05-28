@@ -1,0 +1,49 @@
+<div [@routerTransition]>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-6">
+          <h1>{{ "Upload Logo" | localize }}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="content px-2">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-body">
+          <!-- <div *ngIf="checkPageAction('Request')"> -->
+          <div>
+            <form
+              class="form-horizontal"
+              #fileUploadForm="ngForm"
+              (ngSubmit)="save()"
+              enctype="multipart/form-data"
+            >
+              <div class="form-group">
+                <input
+                  class="form-control"
+                  type="file"
+                  id="Image"
+                  name="Image"
+                  required
+                  (change)="fileChangeEvent($event)"
+                />
+              </div>
+
+              <button
+                type="submit"
+                class="btn bg-blue"
+                [disabled]="!fileUploadForm.form.valid"
+              >
+                <i class="fas fa-upload"></i>
+
+                {{ "Upload" | localize }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

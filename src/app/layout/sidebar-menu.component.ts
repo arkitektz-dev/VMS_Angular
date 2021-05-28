@@ -39,8 +39,8 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
         const currentUrl = event.url !== "/" ? event.url : this.homeRoute;
-        const primaryUrlSegmentGroup = this.router.parseUrl(currentUrl).root
-          .children[PRIMARY_OUTLET];
+        const primaryUrlSegmentGroup =
+          this.router.parseUrl(currentUrl).root.children[PRIMARY_OUTLET];
         if (primaryUrlSegmentGroup) {
           this.activateMenuItems("/" + primaryUrlSegmentGroup.toString());
         }
@@ -68,6 +68,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         "/app/loginOption",
         "fas fa-home",
         "Pages.LoginOptions",
+        "The main page of the application."
+      ),
+      new MenuItem(
+        this.l("Upload Logo"),
+        "/app/upload-logo",
+        "fas fa-home",
+        "Pages.UploadLogo",
         "The main page of the application."
       ),
       new MenuItem(

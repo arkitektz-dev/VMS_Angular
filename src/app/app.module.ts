@@ -84,6 +84,7 @@ import { MyInvitationQrcodeDataComponent } from "./my-invitation-qrcode-data/my-
 
 import { DownloadSetupComponent } from "./download-setup/download-setup.component";
 import { LoginOptionComponent } from "./login-option/login-option.component";
+import { UploadLogoComponent } from "./upload-logo/upload-logo.component";
 import { ChartsModule } from "ng2-charts";
 
 @NgModule({
@@ -95,6 +96,8 @@ import { ChartsModule } from "ng2-charts";
     DownloadSetupComponent,
 
     LoginOptionComponent,
+
+    UploadLogoComponent,
 
     // tenants
     TenantsComponent,
