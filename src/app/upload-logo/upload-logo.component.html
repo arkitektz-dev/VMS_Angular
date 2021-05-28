@@ -31,6 +31,11 @@
                 />
               </div>
 
+              <p *ngIf="responseMessage$ | async">
+                Your Logo is saved successfully. Your changes will reflect once
+                you login back
+              </p>
+
               <button
                 type="submit"
                 class="btn bg-blue"

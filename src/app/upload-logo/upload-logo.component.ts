@@ -13,6 +13,7 @@ import {
 import { finalize } from "rxjs/operators";
 import { FileUploader, FileUploaderOptions } from "ng2-file-upload";
 import { IAjaxResponse } from "@node_modules/abp-ng2-module";
+import { Subject } from "rxjs";
 
 @Component({
   templateUrl: "./upload-logo.component.html",
@@ -23,6 +24,7 @@ export class UploadLogoComponent extends AppComponentBase implements OnInit {
   public uploader: FileUploader;
   private _uploaderOptions: FileUploaderOptions = {};
   pageActions = [];
+  public responseMessage$ = new Subject<boolean>();
 
   constructor(
     injector: Injector,
@@ -72,11 +74,11 @@ export class UploadLogoComponent extends AppComponentBase implements OnInit {
         this._tenantServiceProxy
           .uploadLogo(resp.result)
           .pipe(finalize(() => {}))
-          .subscribe(() => {});
+          .subscribe(() => {
+            this.responseMessage$.next(true);
+          });
 
-        abp.notify.success(this.l("FileSavedSuccessfully"));
-
-        location.reload();
+        // location.reload();
       } else {
         abp.notify.error(this.l("SomeErrorOccured"));
       }
